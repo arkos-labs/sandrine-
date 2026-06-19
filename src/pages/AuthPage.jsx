@@ -1,9 +1,7 @@
 import { useState } from 'react'
-import { Shield, Eye, EyeOff, Mail, Lock, User, AlertCircle, ArrowRight } from 'lucide-react'
+import { Eye, EyeOff, Mail, Lock, User, AlertCircle, ArrowRight } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { useNavigate } from 'react-router-dom'
-
-const PRIDE_COLORS = ['#E53E3E', '#FF9F43', '#F4D03F', '#27AE60', '#3B82F6', '#8E44AD']
 
 export default function AuthPage() {
   const [tab, setTab] = useState('signin') // 'signin' | 'signup'
@@ -63,218 +61,213 @@ export default function AuthPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col md:flex-row bg-white">
+    <div className="min-h-screen flex flex-col md:flex-row bg-[--color-ks-lacquer-black] text-[--color-ks-text-warm] font-sans">
       {/* Left panel — branding */}
-      <div className="hidden md:flex md:w-1/2 flex-col justify-between p-12 bg-slate-900">
+      <div className="hidden md:flex md:w-5/12 flex-col justify-between p-12 lg:p-20 bg-[--color-ks-lacquer-deep] border-r border-[--color-ks-gold-hairline] relative overflow-hidden">
+        
         {/* Logo */}
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-indigo-600 rounded-lg flex items-center justify-center">
-            <Shield size={20} className="text-white" />
-          </div>
-          <span className="text-white font-bold text-2xl">SafeTask</span>
+        <div className="flex items-center gap-3 relative z-10 mb-20">
+          <span className="text-[--color-ks-kinpaku] font-display font-light text-3xl tracking-wide uppercase">SafeTask</span>
         </div>
 
         {/* Hero text */}
-        <div>
-          {/* Pride flag strip */}
-          <div className="pride-strip mb-8 w-28">
-            {PRIDE_COLORS.map((c, i) => (
-              <div key={i} className="flex-1" style={{ background: c }} />
-            ))}
+        <div className="relative z-10 flex-1 flex flex-col justify-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 mb-8 border border-[--color-ks-gold-hairline] rounded-sm w-max">
+            <span className="w-1.5 h-1.5 rounded-full bg-[--color-ks-patina] animate-pulse"></span>
+            <span className="text-[--color-ks-text-muted] text-[0.65rem] font-mono uppercase tracking-widest">
+              Espace vérifié & bienveillant
+            </span>
           </div>
-          <h1 className="text-4xl font-bold text-white leading-tight mb-5">
-            Services à domicile,<br />en toute confiance
+          <h1 className="text-display text-5xl lg:text-7xl leading-[1.1] mb-8 text-[--color-ks-champagne]">
+            VOS TRAVAUX,<br />SANS JUGEMENT.
           </h1>
-          <p className="text-slate-400 text-base leading-relaxed mb-8 max-w-md">
-            La marketplace dédiée à la communauté LGBTQIA+ et ses allié·e·s. Tolérance zéro pour la discrimination.
+          <p className="text-[--color-ks-text-warm] text-lg font-light leading-relaxed mb-12 max-w-md">
+            Trouvez des artisan·es et prestataires de confiance. Une communauté qui rénove en toute sécurité.
           </p>
-          <div className="flex flex-wrap gap-2.5">
-            {['Identité vérifiée', 'Charte Safe Space', 'Signalement instantané'].map(item => (
-              <span key={item} className="bg-slate-800 px-3 py-1.5 rounded-lg text-sm text-slate-300 border border-slate-700">
+          <div className="flex flex-wrap gap-3">
+            {['Identité vérifiée', 'Charte signée', 'Inclusif'].map(item => (
+              <span key={item} className="border border-[--color-ks-gold-hairline] text-[--color-ks-champagne] bg-[--color-ks-lacquer-black] px-4 py-2 text-[0.65rem] font-mono uppercase tracking-widest rounded-sm">
                 {item}
               </span>
             ))}
           </div>
         </div>
 
-        <p className="text-slate-500 text-sm">
-          © 2026 SafeTask — Tous droits réservés
+        <p className="text-[--color-ks-text-faint] text-[0.65rem] font-mono uppercase tracking-widest relative z-10 mt-12">
+          © {new Date().getFullYear()} SAFETASK — TOUS DROITS RÉSERVÉS
         </p>
       </div>
 
       {/* Right panel — form */}
-      <div className="flex-1 flex items-center justify-center p-6 md:p-12 bg-slate-50 md:bg-white">
-        <div className="w-full max-w-md">
+      <div className="flex-1 flex items-center justify-center p-6 md:p-12 relative overflow-y-auto bg-[--color-ks-lacquer-black]">
+        <div className="w-full max-w-md relative z-10">
           {/* Mobile logo */}
-          <div className="flex items-center gap-2 mb-8 md:hidden">
-            <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-              <Shield size={16} className="text-white" />
-            </div>
-            <span className="text-slate-900 font-bold text-xl">SafeTask</span>
+          <div className="flex items-center justify-center mb-10 md:hidden">
+            <span className="text-[--color-ks-kinpaku] font-display font-light text-3xl tracking-wide uppercase">SafeTask</span>
           </div>
 
           {/* Tabs */}
-          <div className="bg-slate-100 rounded-lg p-1 flex mb-8">
+          <div className="flex mb-10 border border-[--color-ks-gold-hairline] rounded-sm bg-[--color-ks-lacquer-deep] p-1">
             <button
               id="tab-signin"
               onClick={() => setTab('signin')}
-              className={`flex-1 py-2.5 rounded-md text-sm font-semibold transition-colors duration-150 ${
-                tab === 'signin' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-700'
+              className={`flex-1 py-3 text-sm font-medium transition-colors duration-300 rounded-sm ${
+                tab === 'signin' ? 'bg-[--color-ks-graphite] text-[--color-ks-kinpaku]' : 'text-[--color-ks-text-muted] hover:text-[--color-ks-champagne]'
               }`}
             >
-              Se connecter
+              Connexion
             </button>
             <button
               id="tab-signup"
               onClick={() => setTab('signup')}
-              className={`flex-1 py-2.5 rounded-md text-sm font-semibold transition-colors duration-150 ${
-                tab === 'signup' ? 'bg-white text-slate-900 shadow-xs' : 'text-slate-500 hover:text-slate-700'
+              className={`flex-1 py-3 text-sm font-medium transition-colors duration-300 rounded-sm ${
+                tab === 'signup' ? 'bg-[--color-ks-graphite] text-[--color-ks-kinpaku]' : 'text-[--color-ks-text-muted] hover:text-[--color-ks-champagne]'
               }`}
             >
-              S'inscrire
+              Inscription
             </button>
           </div>
 
           {/* Error */}
           {error && (
-            <div className="flex items-center gap-2 bg-crimson-50 border border-crimson-100 rounded-lg px-4 py-3 mb-5">
-              <AlertCircle size={16} className="text-crimson-600 flex-shrink-0" />
-              <p className="text-crimson-700 text-sm">{error}</p>
+            <div className="flex items-center gap-3 bg-[--color-ks-lacquer-deep] border border-[--color-ks-vermilion] rounded-md px-4 py-3 mb-8">
+              <AlertCircle size={18} className="text-[--color-ks-vermilion] flex-shrink-0" />
+              <p className="text-[--color-ks-vermilion] text-sm tracking-wide">{error}</p>
             </div>
           )}
 
           {tab === 'signin' ? (
-            <form onSubmit={handleSignIn} className="space-y-4" key="signin">
-              <h2 className="text-xl font-bold text-slate-900 mb-6">Bon retour</h2>
+            <form onSubmit={handleSignIn} className="space-y-6" key="signin">
+              <h2 className="text-headline text-3xl mb-8">Ravi de vous revoir</h2>
 
               <div>
-                <label className="input-label">Adresse email</label>
+                <label className="input-label mb-2">Adresse email</label>
                 <div className="relative">
-                  <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[--color-ks-text-muted]" />
                   <input
                     id="signin-email"
                     type="email"
                     value={form.email}
                     onChange={handleChange('email')}
                     placeholder="exemple@email.com"
-                    className="input-field pl-10"
+                    className="input-field pl-11 py-3"
                     autoComplete="email"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="input-label">Mot de passe</label>
+                <label className="input-label mb-2">Mot de passe</label>
                 <div className="relative">
-                  <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[--color-ks-text-muted]" />
                   <input
                     id="signin-password"
                     type={showPassword ? 'text' : 'password'}
                     value={form.password}
                     onChange={handleChange('password')}
                     placeholder="••••••••"
-                    className="input-field pl-10 pr-10"
+                    className="input-field pl-11 pr-11 py-3"
                     autoComplete="current-password"
                   />
                   <button type="button" onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[--color-ks-text-muted] hover:text-[--color-ks-champagne] transition-colors">
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
               </div>
 
-              <button id="signin-submit" type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2 mt-6">
-                {loading ? <div className="spinner w-5 h-5" /> : (<><ArrowRight size={18} /> Se connecter</>)}
+              <button id="signin-submit" type="submit" disabled={loading} className="btn-primary w-full py-3.5 mt-8 text-sm">
+                {loading ? <div className="spinner w-5 h-5 spinner-white" /> : 'ME CONNECTER'}
               </button>
 
-              <div className="mt-4 pt-4 border-t border-slate-200 text-center">
+              <div className="mt-8 text-center">
                 <button
                   type="button"
                   onClick={handleGuestSignIn}
-                  className="text-slate-500 hover:text-slate-800 text-sm transition-colors"
+                  className="text-[--color-ks-text-muted] hover:text-[--color-ks-champagne] text-xs font-mono uppercase tracking-widest transition-colors flex items-center justify-center gap-2 mx-auto group"
                 >
-                  Continuer sans s'identifier (mode invité) →
+                  Continuer en invité <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </button>
               </div>
             </form>
           ) : (
-            <form onSubmit={handleSignUp} className="space-y-4" key="signup">
-              <h2 className="text-xl font-bold text-slate-900 mb-6">Rejoignez-nous</h2>
+            <form onSubmit={handleSignUp} className="space-y-6" key="signup">
+              <h2 className="text-headline text-3xl mb-8">Créer un compte</h2>
 
               <div>
-                <label className="input-label">Nom complet</label>
+                <label className="input-label mb-2">Nom complet</label>
                 <div className="relative">
-                  <User size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <User size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[--color-ks-text-muted]" />
                   <input
                     id="signup-name"
                     type="text"
                     value={form.fullName}
                     onChange={handleChange('fullName')}
                     placeholder="Votre prénom et nom"
-                    className="input-field pl-10"
+                    className="input-field pl-11 py-3"
                     autoComplete="name"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="input-label">Adresse email</label>
+                <label className="input-label mb-2">Adresse email</label>
                 <div className="relative">
-                  <Mail size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <Mail size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[--color-ks-text-muted]" />
                   <input
                     id="signup-email"
                     type="email"
                     value={form.email}
                     onChange={handleChange('email')}
                     placeholder="exemple@email.com"
-                    className="input-field pl-10"
+                    className="input-field pl-11 py-3"
                     autoComplete="email"
                   />
                 </div>
               </div>
 
               <div>
-                <label className="input-label">Mot de passe</label>
+                <label className="input-label mb-2">Mot de passe</label>
                 <div className="relative">
-                  <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[--color-ks-text-muted]" />
                   <input
                     id="signup-password"
                     type={showPassword ? 'text' : 'password'}
                     value={form.password}
                     onChange={handleChange('password')}
                     placeholder="Au moins 8 caractères"
-                    className="input-field pl-10 pr-10"
+                    className="input-field pl-11 pr-11 py-3"
                     autoComplete="new-password"
                   />
                   <button type="button" onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600">
-                    {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[--color-ks-text-muted] hover:text-[--color-ks-champagne] transition-colors">
+                    {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
                   </button>
                 </div>
               </div>
 
               <div>
-                <label className="input-label">Confirmer le mot de passe</label>
+                <label className="input-label mb-2">Confirmer mot de passe</label>
                 <div className="relative">
-                  <Lock size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
+                  <Lock size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-[--color-ks-text-muted]" />
                   <input
                     id="signup-confirm"
                     type={showPassword ? 'text' : 'password'}
                     value={form.confirmPassword}
                     onChange={handleChange('confirmPassword')}
                     placeholder="••••••••"
-                    className="input-field pl-10"
+                    className="input-field pl-11 py-3"
                     autoComplete="new-password"
                   />
                 </div>
               </div>
 
-              <button id="signup-submit" type="submit" disabled={loading} className="btn-primary w-full flex items-center justify-center gap-2 mt-6">
-                {loading ? <div className="spinner w-5 h-5" /> : (<><ArrowRight size={18} /> Créer mon compte</>)}
+              <button id="signup-submit" type="submit" disabled={loading} className="btn-primary w-full py-3.5 mt-8 text-sm">
+                {loading ? <div className="spinner w-5 h-5 spinner-white" /> : "S'INSCRIRE"}
               </button>
 
-              <p className="text-slate-500 text-xs text-center">
-                En vous inscrivant, vous acceptez notre Charte Safe Space.
+              <p className="text-[--color-ks-text-faint] text-xs text-center mt-6 tracking-wide leading-relaxed max-w-xs mx-auto">
+                En vous inscrivant, vous acceptez notre <span className="text-[--color-ks-champagne] underline cursor-pointer hover:text-[--color-ks-kinpaku] transition-colors">Charte de bienveillance</span>.
               </p>
             </form>
           )}

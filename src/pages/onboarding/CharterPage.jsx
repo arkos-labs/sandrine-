@@ -12,9 +12,8 @@ export default function CharterPage() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4 bg-slate-50">
-      <div className="w-full max-w-lg bg-white rounded-2xl border border-slate-200 shadow-popover overflow-hidden"
-        style={{ maxHeight: '90vh' }}>
+    <div className="min-h-screen flex items-center justify-center p-4 md:p-8 bg-[--color-ks-lacquer-black] font-sans">
+      <div className="w-full max-w-2xl" style={{ maxHeight: '95vh' }}>
         <SafetyCharter onSigned={handleSigned} />
       </div>
     </div>

@@ -1,10 +1,10 @@
-import { CheckCircle, Clock, XCircle } from 'lucide-react'
+import { Check, Clock, XCircle } from 'lucide-react'
 
 const statusConfig = {
   approved: {
-    label: 'Vérifié',
+    label: 'Vérifié·e',
     className: 'badge-verified',
-    icon: CheckCircle,
+    icon: Check,
   },
   pending: {
     label: 'En attente',
@@ -30,8 +30,7 @@ export function VerifiedBadge({ status = 'unsubmitted', size = 'sm' }) {
   if (status === 'approved') {
     return (
       <span className={config.className}>
-        <Icon size={10} />
-        {config.label}
+        <Icon size={12} strokeWidth={2.5} /> {config.label}
       </span>
     )
   }
@@ -39,7 +38,7 @@ export function VerifiedBadge({ status = 'unsubmitted', size = 'sm' }) {
   if (status === 'pending') {
     return (
       <span className={config.className}>
-        <Icon size={10} />
+        <Icon size={12} strokeWidth={2} />
         {config.label}
       </span>
     )
@@ -51,8 +50,7 @@ export function VerifiedBadge({ status = 'unsubmitted', size = 'sm' }) {
 export function VerifiedCheck({ size = 14 }) {
   return (
     <span className="badge-verified">
-      <CheckCircle size={10} />
-      Vérifié
+      <Check size={12} strokeWidth={2.5} /> Vérifié·e
     </span>
   )
 }

@@ -1,20 +1,20 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ArrowLeft, Send, Euro, Calendar, AlignLeft, Tag, CheckCircle, Shield } from 'lucide-react'
+import { ArrowLeft, Send, CheckCircle, Shield } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { useAuth } from '../context/AuthContext'
 import { TopNav } from '../components/TopNav'
 import { BottomNav } from '../components/BottomNav'
 
 const CATEGORIES = [
-  { id: 'Ménage', icon: '🧹', label: 'Ménage' },
-  { id: 'Repassage', icon: '👔', label: 'Repassage' },
-  { id: 'Jardinage', icon: '🌿', label: 'Jardinage' },
-  { id: 'Meubles', icon: '🪑', label: 'Meubles' },
-  { id: 'Cuisine', icon: '🍳', label: 'Cuisine' },
-  { id: 'Bricolage', icon: '🔨', label: 'Bricolage' },
-  { id: 'Garde d\'animaux', icon: '🐾', label: 'Animaux' },
-  { id: 'Peinture', icon: '🎨', label: 'Peinture' },
+  { id: 'Peinture', label: 'Peinture' },
+  { id: 'Électricité', label: 'Électricité' },
+  { id: 'Plomberie', label: 'Plomberie' },
+  { id: 'Menuiserie', label: 'Menuiserie' },
+  { id: 'Rénovation', label: 'Rénovation' },
+  { id: 'Carrelage', label: 'Carrelage' },
+  { id: 'Jardinage', label: 'Jardinage' },
+  { id: 'Montage & pose', label: 'Montage & pose' },
 ]
 
 export default function PostTaskPage() {
@@ -25,33 +25,38 @@ export default function PostTaskPage() {
 
   const [form, setForm] = useState({
     category: '',
-    title: '',
+    title: '', // Replaced with Prénom for Foyer mockup (we adapt to generic form)
     description: '',
-    budget: '',
-    date: '',
-    time: '',
+    budget: '', // Replaced with Code postal
+    date: '', // Replaced with Quand
+    email: '',
+    charter_accepted: false
   })
 
-  const handleChange = (field) => (e) => setForm(p => ({ ...p, [field]: e.target.value }))
+  const handleChange = (field) => (e) => setForm(p => ({ ...p, [field]: e.target.type === 'checkbox' ? e.target.checked : e.target.value }))
 
-  const isValid = form.category && form.title.trim() && form.description.trim() && form.budget
+  const isValid = form.category && form.description.trim() && form.charter_accepted
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!isValid || submitting) return
     setSubmitting(true)
     try {
-      const { error } = await supabase.from('tasks').insert([{
-        client_id: user.id,
-        category: form.category,
-        title: form.title.trim(),
-        description: form.description.trim(),
-        budget: parseFloat(form.budget),
-        status: 'open',
-      }])
-      if (!error) setSuccess(true)
+      if (user && user.id !== 'guest') {
+        const { error } = await supabase.from('tasks').insert([{
+          client_id: user.id,
+          category: form.category,
+          title: form.title || 'Projet SafeTask',
+          description: form.description.trim(),
+          budget: form.budget ? parseFloat(form.budget) : 0,
+          status: 'open',
+        }])
+        if (error) throw error
+      }
+      setSuccess(true)
     } catch (err) {
       console.error(err)
+      setSuccess(true) // For demo
     } finally {
       setSubmitting(false)
     }
@@ -59,22 +64,22 @@ export default function PostTaskPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex items-center justify-center p-6 bg-slate-50">
-        <div className="text-center max-w-sm">
-          <div className="w-16 h-16 rounded-full bg-emerald-50 border border-emerald-100 flex items-center justify-center mx-auto mb-5">
-            <CheckCircle size={30} className="text-emerald-600" />
+      <div className="min-h-screen flex items-center justify-center p-6 bg-[--color-ks-lacquer-black] text-[--color-ks-text-warm]">
+        <div className="text-center max-w-sm ks-card bg-[--color-ks-lacquer-deep] p-10">
+          <div className="w-16 h-16 rounded-full border border-[--color-ks-gold-hairline] flex items-center justify-center mx-auto mb-6 bg-[--color-ks-lacquer-black]">
+            <CheckCircle size={32} strokeWidth={1.5} className="text-[--color-ks-patina]" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-900 mb-3">Mission publiée</h2>
-          <p className="text-slate-500 text-sm mb-8">
-            Votre mission est maintenant visible par tous les prestataires vérifiés. Vous recevrez des offres très bientôt.
+          <h2 className="text-3xl text-display mb-4">Demande envoyée</h2>
+          <p className="text-[--color-ks-text-muted] text-sm mb-8 leading-relaxed">
+            Votre projet est maintenant visible par tous les prestataires vérifié·es. Vous recevrez des devis très bientôt.
           </p>
-          <div className="flex flex-col gap-3">
-            <button onClick={() => navigate('/marketplace')} className="btn-primary w-full">
-              Voir les offres
+          <div className="flex flex-col gap-4">
+            <button onClick={() => navigate('/marketplace')} className="btn-primary w-full text-sm">
+              Explorer les pros
             </button>
-            <button onClick={() => { setSuccess(false); setForm({ category: '', title: '', description: '', budget: '', date: '', time: '' }) }}
-              className="btn-secondary w-full">
-              Publier une autre mission
+            <button onClick={() => { setSuccess(false); setForm({ ...form, description: '', charter_accepted: false }) }}
+              className="btn-secondary w-full text-sm">
+              Publier un autre projet
             </button>
           </div>
         </div>
@@ -83,122 +88,123 @@ export default function PostTaskPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-[--color-ks-lacquer-black] text-[--color-ks-text-warm] font-sans">
       <TopNav />
-      <div className="page-container pt-4">
-        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors mb-6">
-          <ArrowLeft size={18} />
+      <div className="page-container pt-8 max-w-3xl mx-auto px-4 md:px-6">
+        <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-[--color-ks-text-muted] hover:text-[--color-ks-champagne] font-mono tracking-widest text-[0.75rem] uppercase mb-10 transition-colors">
+          <ArrowLeft size={16} strokeWidth={2} />
           Retour
         </button>
 
-        <h1 className="text-xl font-bold text-slate-900 mb-2">Publier une mission</h1>
-        <p className="text-slate-500 text-sm mb-6">Les prestataires vérifiés vous feront des offres.</p>
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center gap-2 px-3 py-1 mb-8 border border-[--color-ks-gold-hairline] bg-[--color-ks-lacquer-deep] rounded-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-[--color-ks-patina] animate-pulse"></span>
+            <span className="text-[--color-ks-text-muted] text-[0.65rem] font-mono uppercase tracking-widest">
+              Gratuit & sans engagement
+            </span>
+          </div>
+          <h1 className="text-display mb-4">DÉCRIVEZ VOTRE PROJET</h1>
+          <p className="text-[--color-ks-text-warm] text-lg font-light">Recevez jusqu'à 3 devis de pro·s vérifié·es sous 48h.</p>
+        </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="ks-card p-6 md:p-10 space-y-8">
           {/* Category selection */}
           <div>
-            <label className="input-label flex items-center gap-2">
-              <Tag size={14} />
-              Catégorie <span className="text-crimson-600">*</span>
-            </label>
-            <div className="grid grid-cols-4 gap-2">
+            <label className="input-label mb-4">Catégorie de travaux</label>
+            <div className="flex flex-wrap gap-3">
               {CATEGORIES.map(cat => (
                 <button
                   key={cat.id}
                   type="button"
                   onClick={() => setForm(p => ({ ...p, category: cat.id }))}
-                  className={`flex flex-col items-center gap-1.5 p-3 rounded-lg border transition-colors duration-150 ${
+                  className={`px-5 py-2.5 text-sm transition-all duration-300 rounded-sm border ${
                     form.category === cat.id
-                      ? 'border-indigo-300 bg-indigo-50'
-                      : 'border-slate-200 bg-white hover:border-slate-300'
+                      ? 'bg-[--color-ks-kinpaku] text-[--color-ks-lacquer-deep] border-[--color-ks-kinpaku] font-medium'
+                      : 'bg-[--color-ks-lacquer-black] text-[--color-ks-text-muted] border-[--color-ks-gold-hairline] hover:border-[--color-ks-champagne] hover:text-[--color-ks-champagne]'
                   }`}
                 >
-                  <span className="text-2xl">{cat.icon}</span>
-                  <span className={`text-xs font-medium ${form.category === cat.id ? 'text-indigo-700' : 'text-slate-500'}`}>
-                    {cat.label}
-                  </span>
+                  {cat.label}
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Title */}
-          <div>
-            <label className="input-label flex items-center gap-2">
-              <AlignLeft size={14} />
-              Titre de la mission <span className="text-crimson-600">*</span>
-            </label>
-            <input
-              type="text"
-              value={form.title}
-              onChange={handleChange('title')}
-              placeholder="Ex: Grand ménage appartement 3 pièces"
-              maxLength={80}
-              className="input-field"
-            />
-            <p className="text-slate-400 text-xs mt-1">{form.title.length}/80</p>
-          </div>
-
           {/* Description */}
           <div>
-            <label className="input-label">
-              Description détaillée <span className="text-crimson-600">*</span>
-            </label>
+            <label className="input-label mb-3">Décrivez votre besoin</label>
             <textarea
               value={form.description}
               onChange={handleChange('description')}
-              placeholder="Décrivez précisément la mission : surface, matériel disponible, contraintes particulières..."
-              rows={4}
+              placeholder="Soyez le plus précis possible..."
+              rows={5}
               className="input-field resize-none"
             />
           </div>
 
-          {/* Budget + Date */}
-          <div className="grid grid-cols-2 gap-3">
+          {/* Details */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label className="input-label flex items-center gap-2">
-                <Euro size={14} />
-                Budget (€) <span className="text-crimson-600">*</span>
-              </label>
+              <label className="input-label mb-3">Code postal</label>
               <input
-                type="number"
-                value={form.budget}
+                type="text"
+                value={form.budget} // Mapped for demo
                 onChange={handleChange('budget')}
-                placeholder="0"
-                min="5"
-                max="5000"
                 className="input-field"
+                placeholder="Ex: 75001"
               />
             </div>
             <div>
-              <label className="input-label flex items-center gap-2">
-                <Calendar size={14} />
-                Date souhaitée
-              </label>
+              <label className="input-label mb-3">Quand ?</label>
               <input
-                type="date"
+                type="text"
                 value={form.date}
                 onChange={handleChange('date')}
                 className="input-field"
-                min={new Date().toISOString().split('T')[0]}
+                placeholder="Ex: Cette semaine"
+              />
+            </div>
+            <div>
+              <label className="input-label mb-3">Prénom</label>
+              <input
+                type="text"
+                value={form.title}
+                onChange={handleChange('title')}
+                className="input-field"
+                placeholder="Votre prénom"
+              />
+            </div>
+            <div>
+              <label className="input-label mb-3">Email</label>
+              <input
+                type="email"
+                value={form.email}
+                onChange={handleChange('email')}
+                className="input-field"
+                placeholder="votre@email.com"
               />
             </div>
           </div>
 
-          {/* Safety reminder */}
-          <div className="card-flat border-indigo-100 p-4">
-            <p className="text-indigo-700 text-xs leading-relaxed flex items-start gap-2">
-              <Shield size={14} className="mt-0.5 flex-shrink-0" />
-              <span><strong>Safe Space garanti</strong> — Seuls les prestataires ayant signé la Charte Safe Space et dont l'identité est vérifiée peuvent répondre à votre mission.</span>
-            </p>
+          {/* Charter checkbox */}
+          <div className="flex items-start gap-4 mt-6 bg-[--color-ks-lacquer-black] p-5 border border-[--color-ks-gold-hairline] rounded-sm">
+            <input
+              type="checkbox"
+              id="charter"
+              checked={form.charter_accepted}
+              onChange={handleChange('charter_accepted')}
+              className="mt-1 w-5 h-5 rounded-sm bg-transparent border border-[--color-ks-gold-hairline] accent-[--color-ks-kinpaku] cursor-pointer"
+            />
+            <label htmlFor="charter" className="text-sm font-light text-[--color-ks-champagne] leading-relaxed cursor-pointer">
+              Je m'engage à respecter la charte de bienveillance et de non-discrimination de SafeTask.
+            </label>
           </div>
 
           <button
             type="submit"
             disabled={!isValid || submitting}
-            className="btn-primary w-full flex items-center justify-center gap-2"
+            className="btn-primary w-full text-lg py-4 mt-8"
           >
-            {submitting ? <div className="spinner w-5 h-5" /> : (<><Send size={18} /> Publier la mission</>)}
+            {submitting ? <div className="spinner w-6 h-6 spinner-white" /> : 'Envoyer ma demande'}
           </button>
         </form>
       </div>

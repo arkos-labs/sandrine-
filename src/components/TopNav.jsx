@@ -1,5 +1,5 @@
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Home, Search, PlusCircle, MessageCircle, User, Shield, LogOut } from 'lucide-react'
+import { Home, Search, PlusCircle, MessageCircle, User, LogOut } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
 const navItems = [
@@ -16,17 +16,14 @@ export function TopNav() {
   const { signOut, profile } = useAuth()
 
   return (
-    <header className="hidden md:flex items-center justify-between px-6 py-3.5 border-b border-slate-200 bg-white/95 backdrop-blur sticky top-0 z-40">
+    <header className="hidden md:flex items-center justify-between px-8 py-5 border-b border-[--color-ks-gold-hairline] bg-[--color-ks-lacquer-black] sticky top-0 z-40">
       {/* Logo */}
-      <button onClick={() => navigate('/')} className="flex items-center gap-2">
-        <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-          <Shield size={16} className="text-white" />
-        </div>
-        <span className="text-slate-900 font-bold text-lg">SafeTask</span>
+      <button onClick={() => navigate('/')} className="flex items-center gap-2 transition-transform hover:opacity-80">
+        <span className="text-[--color-ks-kinpaku] font-display text-3xl font-light tracking-wide uppercase">SafeTask</span>
       </button>
 
       {/* Nav links */}
-      <nav className="flex items-center gap-1">
+      <nav className="flex items-center gap-6">
         {navItems.map(({ path, icon: Icon, label }) => {
           const isActive = path === '/'
             ? location.pathname === '/'
@@ -35,34 +32,34 @@ export function TopNav() {
             <button
               key={path}
               onClick={() => navigate(path)}
-              className={`flex items-center gap-2 px-3.5 py-2 rounded-lg text-sm font-medium transition-colors duration-150 ${
+              className={`flex items-center gap-2 text-sm transition-all duration-300 ${
                 isActive
-                  ? 'bg-indigo-50 text-indigo-700'
-                  : 'text-slate-500 hover:text-slate-900 hover:bg-slate-100'
+                  ? 'text-[--color-ks-kinpaku] font-medium'
+                  : 'text-[--color-ks-text-muted] hover:text-[--color-ks-champagne] font-normal'
               }`}
             >
-              <Icon size={16} strokeWidth={isActive ? 2.25 : 1.75} />
-              {label}
+              <Icon size={18} strokeWidth={isActive ? 2 : 1.5} />
+              <span className="font-sans">{label}</span>
             </button>
           )
         })}
       </nav>
 
       {/* Right: avatar + logout */}
-      <div className="flex items-center gap-3">
-        <div className="text-right">
-          <p className="text-sm font-medium text-slate-900 leading-tight">{profile?.full_name || 'Mon profil'}</p>
-          <p className="text-xs text-slate-500 leading-tight">{profile?.is_tasker ? 'Client & Tasker' : 'Client'}</p>
+      <div className="flex items-center gap-5">
+        <div className="text-right hidden lg:block">
+          <p className="text-sm font-sans font-medium text-[--color-ks-champagne]">{profile?.full_name || 'Mon profil'}</p>
+          <p className="text-xs font-mono tracking-widest uppercase text-[--color-ks-text-faint] mt-1">{profile?.is_tasker ? 'Client & Pro' : 'Client'}</p>
         </div>
-        <div className="w-9 h-9 rounded-lg bg-indigo-50 border border-indigo-100 flex items-center justify-center text-indigo-700 font-semibold text-sm">
+        <div className="w-10 h-10 rounded-full bg-[--color-ks-lacquer-deep] border border-[--color-ks-gold-hairline] flex items-center justify-center text-[--color-ks-kinpaku] font-sans font-medium">
           {profile?.full_name?.[0]?.toUpperCase() || '?'}
         </div>
         <button
           onClick={signOut}
-          className="p-2 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-700 transition-colors"
+          className="p-2 text-[--color-ks-text-muted] hover:text-[--color-ks-vermilion] transition-colors"
           title="Se déconnecter"
         >
-          <LogOut size={16} />
+          <LogOut size={20} strokeWidth={1.5} />
         </button>
       </div>
     </header>

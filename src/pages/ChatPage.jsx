@@ -25,7 +25,7 @@ export default function ChatPage() {
   const [sending, setSending] = useState(false)
   const [reportOpen, setReportOpen] = useState(false)
   const [isFrozen, setIsFrozen] = useState(false)
-  const [otherUser] = useState({ id: 'other-user-id', name: 'Camille Bernard' })
+  const [otherUser] = useState({ id: 'other-user-id', name: 'Camille Brunet' })
   const messagesEndRef = useRef(null)
   const inputRef = useRef(null)
 
@@ -70,22 +70,22 @@ export default function ChatPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-slate-50">
+    <div className="min-h-screen flex flex-col bg-[--color-ks-lacquer-black] text-[--color-ks-text-warm] font-sans">
       <TopNav />
 
       {/* Chat header */}
-      <div className="sticky top-0 md:top-[57px] z-40 bg-white border-b border-slate-200 px-4 py-3 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <button onClick={() => navigate(-1)} className="p-1.5 rounded-lg hover:bg-slate-100 text-slate-500 hover:text-slate-800 transition-colors">
-            <ArrowLeft size={18} />
+      <div className="sticky top-0 md:top-[69px] z-40 bg-[--color-ks-lacquer-deep] border-b border-[--color-ks-gold-hairline] px-6 py-4 flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <button onClick={() => navigate(-1)} className="p-2 text-[--color-ks-text-muted] hover:text-[--color-ks-champagne] transition-all rounded-full hover:bg-white/5">
+            <ArrowLeft size={20} />
           </button>
-          <div className="w-9 h-9 rounded-lg bg-indigo-600 flex items-center justify-center text-white font-semibold text-sm">
+          <div className="w-10 h-10 rounded-full border border-[--color-ks-gold-hairline] flex items-center justify-center text-[--color-ks-kinpaku] font-display font-light text-xl">
             {otherUser.name[0]}
           </div>
           <div>
-            <p className="font-semibold text-slate-900 text-sm">{otherUser.name}</p>
-            <p className="text-slate-400 text-xs flex items-center gap-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block" />
+            <p className="font-medium text-[--color-ks-champagne] text-base">{otherUser.name}</p>
+            <p className="text-[--color-ks-text-muted] text-[0.65rem] font-mono uppercase tracking-widest flex items-center gap-2 mt-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[--color-ks-patina] inline-block animate-pulse" />
               En ligne
             </p>
           </div>
@@ -95,32 +95,31 @@ export default function ChatPage() {
         <button
           id="report-button"
           onClick={() => setReportOpen(true)}
-          className="flex items-center gap-1.5 bg-crimson-50 hover:bg-crimson-100 text-crimson-600
-            border border-crimson-100 px-3 py-2 rounded-lg text-xs font-semibold transition-colors duration-150"
+          className="flex items-center gap-2 text-[--color-ks-vermilion] hover:bg-[--color-ks-vermilion] hover:text-[--color-ks-lacquer-deep] border border-[--color-ks-vermilion] px-4 py-2 text-xs font-mono uppercase tracking-widest transition-all rounded-sm"
         >
-          <Flag size={12} />
-          Signaler / Bloquer
+          <Flag size={14} />
+          <span className="hidden md:inline">Signaler / Bloquer</span>
         </button>
       </div>
 
       {/* Frozen banner */}
       {isFrozen && (
-        <div className="bg-crimson-50 border-b border-crimson-100 px-4 py-3 flex items-center gap-3">
-          <Lock size={16} className="text-crimson-600 flex-shrink-0" />
+        <div className="bg-[--color-ks-lacquer-deep] border-b border-[--color-ks-vermilion] px-6 py-4 flex items-center gap-4">
+          <Lock size={20} className="text-[--color-ks-vermilion] flex-shrink-0" />
           <div>
-            <p className="text-crimson-700 text-sm font-semibold">Conversation gelée</p>
-            <p className="text-crimson-600/80 text-xs">Notre équipe examine votre signalement. Aucun nouveau message ne peut être envoyé.</p>
+            <p className="text-[--color-ks-vermilion] text-sm font-medium uppercase tracking-wide">Conversation gelée</p>
+            <p className="text-[--color-ks-text-muted] text-sm mt-1">Notre équipe examine votre signalement. Aucun nouveau message ne peut être envoyé.</p>
           </div>
         </div>
       )}
 
       {/* Messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3 pb-36 md:pb-24">
+      <div className="flex-1 overflow-y-auto px-4 md:px-6 py-8 space-y-6 pb-40 md:pb-32 max-w-4xl mx-auto w-full">
         {/* Date separator */}
-        <div className="flex items-center gap-3 my-4">
-          <div className="flex-1 h-px bg-slate-200" />
-          <span className="text-slate-400 text-xs px-2">Aujourd'hui</span>
-          <div className="flex-1 h-px bg-slate-200" />
+        <div className="flex items-center gap-4 my-8">
+          <div className="flex-1 h-px bg-[--color-ks-gold-hairline]" />
+          <span className="text-[--color-ks-text-muted] text-[0.65rem] font-mono tracking-widest px-4 uppercase">Aujourd'hui</span>
+          <div className="flex-1 h-px bg-[--color-ks-gold-hairline]" />
         </div>
 
         {messages.map((msg) => {
@@ -128,19 +127,19 @@ export default function ChatPage() {
           return (
             <div key={msg.id} className={`flex ${isMe ? 'justify-end' : 'justify-start'}`}>
               {!isMe && (
-                <div className="w-7 h-7 rounded-lg bg-indigo-600 flex items-center justify-center text-white text-xs font-semibold mr-2 flex-shrink-0 mt-0.5">
+                <div className="w-8 h-8 rounded-full border border-[--color-ks-gold-hairline] bg-[--color-ks-lacquer-deep] flex items-center justify-center text-[--color-ks-kinpaku] text-xs font-medium mr-3 flex-shrink-0 mt-auto">
                   {otherUser.name[0]}
                 </div>
               )}
-              <div className={`max-w-[75%] ${isMe ? 'items-end' : 'items-start'} flex flex-col gap-1`}>
-                <div className={`px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+              <div className={`max-w-[85%] md:max-w-[75%] ${isMe ? 'items-end' : 'items-start'} flex flex-col gap-1.5`}>
+                <div className={`px-5 py-3 text-[0.95rem] leading-relaxed rounded-md ${
                   isMe
-                    ? 'bg-indigo-600 text-white rounded-br-md'
-                    : 'bg-white text-slate-700 border border-slate-200 rounded-bl-md'
+                    ? 'bg-[--color-ks-kinpaku] text-[--color-ks-lacquer-deep]'
+                    : 'bg-[--color-ks-graphite] text-[--color-ks-champagne] border border-[--color-ks-gold-hairline]'
                 } ${msg.pending ? 'opacity-60' : ''}`}>
                   {msg.content}
                 </div>
-                <span className="text-slate-400 text-[10px] px-1">
+                <span className="text-[--color-ks-text-faint] font-mono uppercase text-[0.65rem] px-1 tracking-widest">
                   {formatTime(msg.created_at)}
                   {msg.pending && ' • Envoi...'}
                 </span>
@@ -150,10 +149,10 @@ export default function ChatPage() {
         })}
 
         {isFrozen && (
-          <div className="flex justify-center my-4">
-            <div className="bg-crimson-50 border border-crimson-100 rounded-lg px-4 py-3 flex items-center gap-2">
-              <Lock size={14} className="text-crimson-600" />
-              <span className="text-crimson-700 text-xs font-medium">Conversation gelée suite à un signalement</span>
+          <div className="flex justify-center my-8">
+            <div className="bg-[--color-ks-lacquer-deep] border border-[--color-ks-vermilion] px-6 py-3 flex items-center gap-3 rounded-md">
+              <Lock size={16} className="text-[--color-ks-vermilion]" />
+              <span className="text-[--color-ks-vermilion] text-xs font-mono uppercase tracking-widest">Conversation gelée suite à un signalement</span>
             </div>
           </div>
         )}
@@ -162,14 +161,14 @@ export default function ChatPage() {
       </div>
 
       {/* Input area */}
-      <div className="fixed bottom-16 md:bottom-0 left-0 right-0 px-4 py-3 border-t border-slate-200 z-30 bg-white">
+      <div className="fixed bottom-[60px] md:bottom-0 left-0 right-0 z-30 bg-[--color-ks-lacquer-deep] border-t border-[--color-ks-gold-hairline] px-4 py-4 md:py-6">
         {isFrozen ? (
-          <div className="flex items-center justify-center gap-2 py-3">
-            <Lock size={16} className="text-crimson-600" />
-            <span className="text-crimson-600 text-sm font-medium">Messagerie désactivée</span>
+          <div className="flex items-center justify-center gap-3 py-2 max-w-4xl mx-auto">
+            <Lock size={20} className="text-[--color-ks-vermilion]" />
+            <span className="text-[--color-ks-vermilion] text-sm font-mono uppercase tracking-widest">Messagerie désactivée</span>
           </div>
         ) : (
-          <div className="flex gap-2 items-end max-w-screen-md mx-auto">
+          <div className="flex gap-4 items-end max-w-4xl mx-auto">
             <div className="flex-1 relative">
               <textarea
                 ref={inputRef}
@@ -178,16 +177,16 @@ export default function ChatPage() {
                 onKeyDown={handleKeyDown}
                 placeholder="Écrivez un message..."
                 rows={1}
-                className="input-field resize-none py-3 pr-12 text-sm max-h-32 overflow-y-auto"
-                style={{ minHeight: '48px' }}
+                className="w-full bg-[--color-ks-lacquer-black] border border-[--color-ks-gold-hairline] text-[--color-ks-champagne] rounded-md py-3.5 pl-4 pr-12 text-sm focus:outline-none focus:border-[--color-ks-kinpaku] resize-none max-h-32 overflow-y-auto transition-colors"
+                style={{ minHeight: '52px' }}
               />
             </div>
             <button
               onClick={sendMessage}
               disabled={!newMessage.trim() || sending}
-              className="w-12 h-12 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-40 rounded-lg flex items-center justify-center transition-colors duration-150 flex-shrink-0"
+              className="w-12 h-12 bg-[--color-ks-kinpaku] text-[--color-ks-lacquer-deep] rounded-md disabled:opacity-40 flex items-center justify-center transition-all hover:bg-[--color-ks-kinpaku-pale] flex-shrink-0"
             >
-              {sending ? <div className="spinner w-4 h-4" /> : <Send size={18} className="text-white" />}
+              {sending ? <div className="spinner w-5 h-5 spinner-white" /> : <Send size={20} />}
             </button>
           </div>
         )}

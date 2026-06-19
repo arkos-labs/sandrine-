@@ -15,7 +15,7 @@ export function BottomNav() {
 
   return (
     <nav className="bottom-nav md:hidden">
-      <div className="bg-white border-t border-slate-200 px-2 py-2">
+      <div className="bg-[--color-ks-lacquer-black] px-2 py-3 pb-[max(env(safe-area-inset-bottom),0.75rem)] border-t border-[--color-ks-gold-hairline]">
         <div className="flex items-center justify-around">
           {navItems.map(({ path, icon: Icon, label }) => {
             const isActive = path === '/'
@@ -25,14 +25,17 @@ export function BottomNav() {
               <button
                 key={path}
                 onClick={() => navigate(path)}
-                className="flex flex-col items-center gap-1 px-3 py-1.5 rounded-lg"
+                className={`flex flex-col items-center justify-center gap-1 w-16 h-12 transition-all duration-300 ${
+                  isActive
+                    ? 'text-[--color-ks-kinpaku]'
+                    : 'text-[--color-ks-text-faint] hover:text-[--color-ks-champagne]'
+                }`}
               >
                 <Icon
-                  size={20}
-                  strokeWidth={isActive ? 2.25 : 1.75}
-                  className={isActive ? 'text-indigo-600' : 'text-slate-400'}
+                  size={22}
+                  strokeWidth={isActive ? 2 : 1.5}
                 />
-                <span className={`text-[10px] font-medium ${isActive ? 'text-indigo-600' : 'text-slate-400'}`}>
+                <span className={`text-[10px] font-sans font-medium tracking-wide ${isActive ? 'text-[--color-ks-kinpaku]' : 'text-[--color-ks-text-faint]'}`}>
                   {label}
                 </span>
               </button>
