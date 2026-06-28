@@ -1,260 +1,278 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Star, Euro, Edit3, CheckCircle, Clock, ToggleLeft, ToggleRight, LogOut, Camera, ArrowRight, Shield } from 'lucide-react'
+import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { useApp } from '../context/AppContext'
-import { VerifiedBadge } from '../components/VerifiedBadge'
-import { TopNav } from '../components/TopNav'
-import { BottomNav } from '../components/BottomNav'
+import { 
+  Home, 
+  Bookmark, 
+  MessageSquare, 
+  User, 
+  UserPlus, 
+  LifeBuoy, 
+  HelpCircle,
+  Bell,
+  ChevronDown,
+  Plus,
+  Wrench,
+  Leaf,
+  Truck,
+  SprayCan,
+  Baby,
+  PawPrint,
+  Laptop,
+  Home as HomeIcon,
+  BookOpen,
+  Sparkles,
+  ChevronRight
+} from 'lucide-react'
 
-const ALL_SKILLS = ['Peinture', 'Électricité', 'Plomberie', 'Menuiserie', 'Rénovation', 'Carrelage', 'Jardinage', 'Montage & pose']
+const MENU_ITEMS = [
+  { id: 'accueil', label: 'Accueil', icon: Home, active: true },
+  { id: 'demandes', label: 'Mes demandes', icon: Bookmark, badge: '1 en cours', link: '/requests' },
+  { id: 'messagerie', label: 'Messagerie', icon: MessageSquare },
+  { id: 'compte', label: 'Compte', icon: User },
+]
+
+const BOTTOM_MENU_ITEMS = [
+  { id: 'inviter', label: 'Inviter des amis', icon: UserPlus, sub: 'Gagnez 5% du montant dépensé par vos amis, à vie.' },
+  { id: 'assistance', label: "Demandes d'assistances", icon: LifeBuoy },
+  { id: 'aide', label: 'Centre d\'aide', icon: HelpCircle },
+]
+
+const CATEGORIES = [
+  { id: 'pour_vous', label: 'Pour vous', icon: Sparkles, active: true },
+  { id: 'bricolage', label: 'Bricolage', icon: Wrench },
+  { id: 'jardinage', label: 'Jardinage', icon: Leaf },
+  { id: 'demenagement', label: 'Déménagement', icon: Truck },
+  { id: 'menage', label: 'Ménage', icon: SprayCan },
+  { id: 'enfants', label: 'Enfants', icon: Baby },
+  { id: 'animaux', label: 'Animaux', icon: PawPrint },
+  { id: 'informatique', label: 'Informatique', icon: Laptop },
+  { id: 'aide', label: 'Aide à domicile', icon: HomeIcon },
+  { id: 'cours', label: 'Cours particuliers', icon: BookOpen },
+]
 
 export default function ProfilePage() {
-  const { profile, updateProfile, signOut, verificationStatus } = useAuth()
+  const { profile } = useAuth()
   const navigate = useNavigate()
-  const [saving, setSaving] = useState(false)
-  const [saved, setSaved] = useState(false)
-  const [editing, setEditing] = useState(false)
-
-  const [form, setForm] = useState({
-    full_name: profile?.full_name || '',
-    bio: profile?.bio || '',
-    hourly_rate: profile?.hourly_rate || 35,
-    skills: profile?.skills || [],
-    is_tasker: profile?.is_tasker || false,
-  })
-
-  const isTasker = form.is_tasker
-
-  const toggleSkill = (skill) => {
-    setForm(prev => ({
-      ...prev,
-      skills: prev.skills.includes(skill)
-        ? prev.skills.filter(s => s !== skill)
-        : [...prev.skills, skill]
-    }))
-  }
-
-  const handleSave = async () => {
-    setSaving(true)
-    try {
-      await updateProfile({
-        full_name: form.full_name,
-        bio: form.bio,
-        hourly_rate: parseFloat(form.hourly_rate),
-        skills: form.skills,
-        is_tasker: form.is_tasker,
-      })
-      setSaved(true)
-      setEditing(false)
-      setTimeout(() => setSaved(false), 3000)
-    } catch (err) {
-      console.error(err)
-    } finally {
-      setSaving(false)
-    }
-  }
-
-  const initials = form.full_name.split(' ').filter(Boolean).map(n => n[0]).join('').toUpperCase() || '?'
+  
+  const firstName = profile?.full_name ? profile.full_name.split(' ')[0] : 'Nico'
+  const initial = firstName.charAt(0).toUpperCase()
 
   return (
-    <div className="min-h-screen bg-[--color-tx-bg-alt]">
-      <TopNav />
-      <div className="page-container pt-8 max-w-4xl mx-auto space-y-6 pb-32 px-4 md:px-6">
-
-        {/* Profile hero card */}
-        <div className="tx-card overflow-hidden !p-0 border-none">
-          <div className="h-28 bg-[--color-tx-navy]"></div>
-          <div className="px-6 md:px-10 pb-8 bg-white relative">
-            <div className="flex items-start justify-between">
-              <div className="relative -mt-16 mb-4">
-                <div className="w-32 h-32 rounded-full bg-white border-4 border-white shadow-md flex items-center justify-center text-[--color-tx-primary] text-5xl font-bold">
-                  <div className="w-full h-full rounded-full bg-[--color-tx-primary-light] flex items-center justify-center">
-                    {initials}
-                  </div>
-                </div>
-                <button className="absolute bottom-1 right-1 w-10 h-10 rounded-full bg-[--color-tx-bg-alt] border border-[--color-tx-border] flex items-center justify-center hover:bg-[--color-tx-border] transition-colors text-[--color-tx-text-secondary] shadow-sm">
-                  <Camera size={18} />
-                </button>
-              </div>
-              <div className="mt-4">
-                <button onClick={() => setEditing(!editing)} className="btn-secondary text-sm px-4 py-2">
-                  <Edit3 size={16} className="inline mr-2" /> {editing ? 'Annuler' : 'Modifier'}
-                </button>
-              </div>
-            </div>
-
-            <div className="flex-1 min-w-0">
-              <h1 className="text-3xl font-bold text-[--color-tx-navy] mb-1">{form.full_name || 'Mon profil'}</h1>
-              <p className="text-[--color-tx-text-secondary] text-sm mb-4">{profile?.email || 'email@example.com'}</p>
-              
-              <div className="flex flex-wrap items-center gap-3">
-                <VerifiedBadge status={verificationStatus} />
-                {isTasker && (
-                  <span className="bg-white border border-[--color-tx-primary] text-[--color-tx-primary] px-3 py-1 text-xs font-semibold uppercase flex items-center gap-1.5 rounded-full">
-                    <Shield size={14} /> Professionnel
-                  </span>
-                )}
-                <span className="bg-[--color-tx-bg-alt] border border-[--color-tx-border] text-[--color-tx-text-secondary] px-3 py-1 text-xs font-semibold uppercase flex items-center gap-1.5 rounded-full">
-                  <Star size={14} /> Safe Space
-                </span>
-              </div>
-            </div>
-          </div>
+    <div className="flex h-screen bg-white font-sans overflow-hidden">
+      
+      {/* Sidebar */}
+      <div className="w-[260px] border-r border-slate-200 flex flex-col flex-shrink-0 bg-white">
+        <div className="h-20 flex items-center px-6">
+          <Link to="/" className="text-[28px] font-bold text-[#0078FA] tracking-tighter">
+            yoojo
+          </Link>
         </div>
-
-        {/* Verification status card */}
-        {verificationStatus !== 'approved' && (
-          <button
-            onClick={() => navigate('/onboarding/verification')}
-            className="w-full text-left tx-card flex items-center gap-6 group hover:border-[--color-tx-primary] hover:shadow-md transition-all cursor-pointer"
-          >
-            <div className="w-14 h-14 rounded-full bg-[--color-tx-primary-light] flex items-center justify-center flex-shrink-0">
-              <Clock size={24} className="text-[--color-tx-primary]" />
-            </div>
-            <div className="flex-1">
-              <p className="font-bold text-lg mb-1 text-[--color-tx-navy] group-hover:text-[--color-tx-primary] transition-colors">Vérification d'identité</p>
-              <p className="text-[--color-tx-text-secondary] text-sm">
-                {verificationStatus === 'unsubmitted'
-                  ? 'Soumettez votre pièce d\'identité pour débloquer toutes les fonctionnalités'
-                  : 'Votre document est en cours d\'examen (24-48h)'}
-              </p>
-            </div>
-            <ArrowRight size={20} className="text-[--color-tx-text-muted] hidden md:block group-hover:text-[--color-tx-primary] transition-colors" />
-          </button>
-        )}
-
-        {/* Edit profile */}
-        {editing ? (
-          <div className="tx-card p-6 md:p-10 space-y-6">
-            <h2 className="text-2xl font-bold text-[--color-tx-navy]">Mes informations</h2>
-            <div className="space-y-6">
-              <div>
-                <label className="input-label">Nom complet</label>
-                <input
-                  type="text"
-                  value={form.full_name}
-                  onChange={e => setForm(p => ({ ...p, full_name: e.target.value }))}
-                  className="input-field"
-                  placeholder="Votre nom"
-                />
-              </div>
-              <div>
-                <label className="input-label">À propos (Bio)</label>
-                <textarea
-                  value={form.bio}
-                  onChange={e => setForm(p => ({ ...p, bio: e.target.value }))}
-                  rows={4}
-                  className="input-field resize-none"
-                  placeholder="Parlez de vous, de votre expérience..."
-                  maxLength={300}
-                />
-                <p className="text-[--color-tx-text-muted] text-xs mt-2 text-right">{form.bio.length}/300</p>
-              </div>
-              <button
-                onClick={handleSave}
-                disabled={saving}
-                className="btn-primary w-full text-base py-3"
-              >
-                {saving ? <div className="spinner" /> : 'Enregistrer les modifications'}
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="tx-card p-6 md:p-8 space-y-4">
-            <h2 className="text-xl font-bold text-[--color-tx-navy] mb-2">À propos</h2>
-            <p className="text-[--color-tx-text] text-[15px] leading-relaxed">{form.bio || 'Aucune présentation renseignée.'}</p>
-          </div>
-        )}
-
-        {/* Tasker mode toggle */}
-        <div className="tx-card p-6 md:p-8">
-          <div className="flex items-center justify-between mb-2">
-            <div>
-              <h2 className="text-xl font-bold text-[--color-tx-navy]">Prestations Pro</h2>
-              <p className="text-[--color-tx-text-secondary] text-sm mt-1">Proposez vos services sur la marketplace</p>
-            </div>
-            <button
-              id="tasker-toggle"
-              onClick={() => setForm(p => ({ ...p, is_tasker: !p.is_tasker }))}
-              className={`transition-colors duration-200 ${isTasker ? 'text-[--color-tx-primary]' : 'text-[--color-tx-border]'}`}
+        
+        <div className="flex-1 flex flex-col gap-2 px-3 py-2 overflow-y-auto">
+          {MENU_ITEMS.map(item => (
+            <div 
+              key={item.id} 
+              onClick={() => item.link && navigate(item.link)}
+              className={`flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer transition-colors ${
+                item.active ? 'bg-slate-100 text-[#0F172A] font-bold' : 'text-slate-600 font-medium hover:bg-slate-50'
+              }`}
             >
-              {isTasker ? <ToggleRight size={56} /> : <ToggleLeft size={56} />}
-            </button>
-          </div>
-
-          {isTasker && (
-            <div className="mt-8 pt-8 border-t border-[--color-tx-border] space-y-8 animate-in slide-in-from-top-4 fade-in">
-              {/* Hourly rate */}
-              <div>
-                <label className="input-label mb-3">Tarif horaire moyen (€/h)</label>
-                <div className="relative max-w-[200px]">
-                  <Euro size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-[--color-tx-text-muted]" />
-                  <input
-                    type="number"
-                    value={form.hourly_rate}
-                    onChange={e => setForm(p => ({ ...p, hourly_rate: e.target.value }))}
-                    min="10"
-                    max="200"
-                    className="input-field pl-12 text-lg font-bold text-[--color-tx-navy]"
-                  />
+              <div className="flex items-center gap-4">
+                <div className="relative">
+                  <item.icon size={20} className={item.active ? 'text-[#0078FA] fill-current' : ''} strokeWidth={item.active ? 2.5 : 2} />
+                  {item.id === 'accueil' && (
+                    <div className="absolute -top-1 -right-1.5 w-3.5 h-3.5 bg-red-500 rounded-full text-[8px] font-bold text-white flex items-center justify-center border-2 border-white">
+                      17
+                    </div>
+                  )}
                 </div>
+                <span>{item.label}</span>
               </div>
-
-              {/* Skills */}
-              <div>
-                <label className="input-label mb-4">Mes domaines d'expertise</label>
-                <div className="flex flex-wrap gap-3">
-                  {ALL_SKILLS.map(skill => (
-                    <button
-                      key={skill}
-                      type="button"
-                      onClick={() => toggleSkill(skill)}
-                      className={`text-sm px-5 py-2.5 transition-all duration-200 rounded-lg font-medium border ${
-                        form.skills.includes(skill)
-                          ? 'bg-[--color-tx-primary-light] text-[--color-tx-primary] border-[--color-tx-primary]'
-                          : 'bg-white text-[--color-tx-text-secondary] border-[--color-tx-border] hover:border-[--color-tx-primary] hover:text-[--color-tx-primary]'
-                      }`}
-                    >
-                      {skill}
-                      {form.skills.includes(skill) && <CheckCircle size={16} className="inline ml-2 -mt-0.5" />}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {!editing && (
-                 <button
-                 onClick={handleSave}
-                 disabled={saving}
-                 className="btn-secondary py-3 px-8 text-sm"
-               >
-                 {saving ? <div className="spinner mx-auto" /> : 'Mettre à jour'}
-               </button>
+              {item.badge && (
+                <span className="text-[11px] text-slate-500">{item.badge}</span>
               )}
             </div>
-          )}
-        </div>
+          ))}
 
-        {saved && (
-          <div className="flex items-center justify-center gap-3 bg-[--color-tx-success-light] border border-[--color-tx-success] rounded-xl px-6 py-4 animate-in fade-in slide-in-from-bottom-2 shadow-sm">
-            <CheckCircle size={20} className="text-[--color-tx-success]" />
-            <p className="text-[--color-tx-success] text-sm font-bold">Profil mis à jour avec succès</p>
-          </div>
-        )}
+          <div className="my-4 border-t border-slate-100"></div>
 
-        {/* Danger zone */}
-        <div className="pt-4 pb-8">
-          <button
-            onClick={signOut}
-            className="w-full flex items-center justify-center gap-3 bg-white border border-[--color-tx-danger] text-[--color-tx-danger] hover:bg-[--color-tx-danger-light] py-4 text-sm font-bold uppercase transition-colors rounded-xl shadow-sm"
-          >
-            <LogOut size={18} />
-            Se déconnecter
-          </button>
+          {BOTTOM_MENU_ITEMS.map(item => (
+            <div 
+              key={item.id} 
+              className="flex items-start gap-4 px-4 py-3 rounded-xl cursor-pointer transition-colors text-slate-600 font-medium hover:bg-slate-50"
+            >
+              <item.icon size={20} className="mt-0.5" strokeWidth={2} />
+              <div className="flex flex-col">
+                <span>{item.label}</span>
+                {item.sub && <span className="text-[11px] text-slate-400 mt-1 leading-snug pr-4">{item.sub}</span>}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
-      <BottomNav />
+
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col bg-white overflow-hidden relative">
+        
+        {/* Top Header */}
+        <header className="h-[72px] border-b border-slate-200 flex items-center justify-center px-6 bg-white shrink-0 absolute top-0 left-0 right-0 z-20">
+          <button 
+            onClick={() => navigate('/post-task')}
+            className="bg-[#0078FA] text-white font-bold text-[15px] px-6 py-2.5 rounded-full hover:bg-blue-600 transition-colors flex items-center gap-2"
+          >
+            <Plus size={18} strokeWidth={3} /> Demander un service
+          </button>
+
+          <div className="absolute right-6 flex items-center gap-2 cursor-pointer hover:opacity-80 transition-opacity">
+            <div className="w-8 h-8 bg-orange-500 text-white font-bold rounded-full flex items-center justify-center text-sm shadow-sm">
+              {initial}
+            </div>
+            <span className="text-sm font-bold text-slate-800">{firstName}</span>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+          </div>
+        </header>
+
+        {/* Scrollable Content */}
+        <div className="flex-1 overflow-y-auto pt-[72px]">
+          <div className="max-w-[1000px] mx-auto px-8 py-8">
+            
+            {/* Address & Notifications */}
+            <div className="flex items-center justify-between mb-8">
+              <div className="flex items-center gap-4 cursor-pointer hover:opacity-80">
+                <div className="w-10 h-10 bg-orange-100 rounded-full flex items-center justify-center">
+                  <HomeIcon size={20} className="text-orange-500 fill-current" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-1">
+                    <span className="font-bold text-[15px] text-[#0F172A]">Domicile</span>
+                    <ChevronDown size={14} className="text-slate-400" />
+                  </div>
+                  <span className="text-xs text-slate-500">10 Rue Crémieux, 75012 Paris</span>
+                </div>
+              </div>
+
+              <button className="flex items-center gap-2 px-4 py-2 bg-white border border-slate-200 rounded-full text-slate-700 font-bold text-[13px] hover:bg-slate-50">
+                <Bell size={16} /> Notifications
+                <span className="bg-red-500 text-white text-[10px] px-1.5 py-0.5 rounded-full ml-1">17</span>
+              </button>
+            </div>
+
+            {/* Categories */}
+            <div className="flex items-center justify-between border-b border-slate-200 mb-10 overflow-x-auto scrollbar-hide">
+              {CATEGORIES.map(cat => (
+                <div 
+                  key={cat.id} 
+                  className={`flex flex-col items-center gap-2 pb-3 px-4 min-w-[90px] cursor-pointer relative ${
+                    cat.active ? 'text-[#0078FA]' : 'text-slate-600 hover:text-slate-900'
+                  }`}
+                >
+                  <cat.icon size={24} className={cat.active ? 'fill-current' : ''} />
+                  <span className="text-[11px] font-bold text-center leading-tight">{cat.label}</span>
+                  {cat.active && (
+                    <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-[#0078FA]"></div>
+                  )}
+                </div>
+              ))}
+            </div>
+
+            {/* Demandes en cours */}
+            <h2 className="text-lg font-bold text-[#0F172A] mb-4">Demandes en cours</h2>
+            <div 
+              onClick={() => navigate('/requests')}
+              className="bg-slate-50 rounded-[20px] p-4 flex items-center justify-between mb-12 cursor-pointer hover:bg-slate-100 transition-colors"
+            >
+              <div className="flex items-center gap-4">
+                <div className="w-14 h-14 bg-white rounded-xl shadow-sm border border-slate-100 flex items-center justify-center p-2">
+                  <div className="w-full h-full bg-[#E5B581] rounded flex flex-col justify-evenly px-2">
+                    <div className="w-full h-1.5 bg-[#B8860B] rounded-sm"></div>
+                    <div className="w-full h-1.5 bg-[#B8860B] rounded-sm"></div>
+                    <div className="w-full h-1.5 bg-[#B8860B] rounded-sm"></div>
+                  </div>
+                </div>
+                <div>
+                  <h3 className="font-bold text-[15px] text-[#0F172A] mb-0.5">Montage de meubles IKEA</h3>
+                  <p className="text-xs text-slate-500">Lundi 29 juin 2026 de 16:30 à 20:30 (4h)</p>
+                </div>
+              </div>
+              <ChevronRight size={20} className="text-slate-400 mr-2" />
+            </div>
+
+            {/* Les plus demandés */}
+            <h2 className="text-lg font-bold text-[#0F172A] mb-4">Les plus demandés en ce moment</h2>
+            <div className="flex gap-4 mb-12 overflow-x-auto scrollbar-hide pb-4 relative">
+              
+              <div className="w-[240px] flex-shrink-0 cursor-pointer group">
+                <div className="h-[120px] bg-[#66C2A5] rounded-[20px] overflow-hidden mb-3 relative">
+                  <div className="absolute inset-x-0 bottom-0 h-1/3 bg-[#55A68C]"></div>
+                  <div className="absolute bottom-2 right-4 w-12 h-12 bg-white rounded-full opacity-20"></div>
+                  {/* Fake illustration details */}
+                  <div className="absolute bottom-4 left-4 w-8 h-8 rounded-full bg-[#1F2937]"></div>
+                  <div className="absolute bottom-4 right-8 w-8 h-8 rounded-full bg-[#1F2937]"></div>
+                  <div className="absolute bottom-6 left-8 w-16 h-8 bg-[#FBBF24] rounded"></div>
+                  <div className="absolute bottom-8 left-16 w-2 h-12 bg-slate-300 -rotate-45 origin-bottom-left"></div>
+                </div>
+                <h3 className="font-bold text-[13px] text-[#0F172A] group-hover:text-[#0078FA] transition-colors">Tondre la pelouse</h3>
+              </div>
+
+              <div className="w-[240px] flex-shrink-0 cursor-pointer group">
+                <div className="h-[120px] bg-[#66C2A5] rounded-[20px] overflow-hidden mb-3 relative opacity-90">
+                  <div className="absolute inset-x-0 bottom-0 h-1/3 bg-[#55A68C]"></div>
+                  {/* Fake illustration details */}
+                  <div className="absolute bottom-4 right-10 w-6 h-16 bg-[#EF4444] rounded-t-lg z-10"></div>
+                  <div className="absolute bottom-10 right-6 w-10 h-10 bg-[#D97706] rounded"></div>
+                  <div className="absolute bottom-4 left-10 w-16 h-12 bg-white/40 rounded"></div>
+                  <div className="absolute bottom-4 left-14 w-16 h-16 bg-white/30 rounded"></div>
+                </div>
+                <h3 className="font-bold text-[13px] text-[#0F172A] group-hover:text-[#0078FA] transition-colors">Aide au déménagement</h3>
+              </div>
+
+              <div className="w-[240px] flex-shrink-0 cursor-pointer group">
+                <div className="h-[120px] bg-[#E0F2FE] rounded-[20px] overflow-hidden mb-3 relative">
+                  <div className="absolute inset-x-0 bottom-0 h-1/2 bg-[#BAE6FD]"></div>
+                  <div className="absolute bottom-0 right-10 w-10 h-16 bg-[#0078FA] rounded-t-lg"></div>
+                  <div className="absolute bottom-16 right-12 w-6 h-4 bg-[#FBBF24]"></div>
+                  <div className="absolute bottom-14 right-6 w-16 h-2 bg-white rounded-full"></div>
+                </div>
+                <h3 className="font-bold text-[13px] text-[#0F172A] group-hover:text-[#0078FA] transition-colors">Ménage à domicile</h3>
+              </div>
+
+              <div className="w-[240px] flex-shrink-0 cursor-pointer group">
+                <div className="h-[120px] bg-[#F3E8E0] rounded-[20px] overflow-hidden mb-3 relative">
+                  <div className="absolute inset-x-0 bottom-0 h-1/3 bg-[#E6D5C9]"></div>
+                  <div className="absolute bottom-4 right-6 w-16 h-16 bg-[#8B5A2B] rounded shadow-sm flex flex-col justify-evenly">
+                    <div className="h-1 w-full border-b border-black/20"></div>
+                    <div className="h-1 w-full border-b border-black/20"></div>
+                  </div>
+                </div>
+                <h3 className="font-bold text-[13px] text-[#0F172A] group-hover:text-[#0078FA] transition-colors">Assemblage de meubles</h3>
+              </div>
+              
+              <div className="absolute right-0 top-[40px] w-8 h-8 bg-white border border-slate-200 rounded-full flex items-center justify-center shadow-sm cursor-pointer hover:bg-slate-50 z-10">
+                <ChevronRight size={18} className="text-slate-600" />
+              </div>
+            </div>
+
+            {/* Réserver un bricoleur */}
+            <h2 className="text-lg font-bold text-[#0F172A] mb-4">Réserver un bricoleur</h2>
+            <div className="flex gap-4 pb-20">
+              {[
+                'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=200&h=200&fit=crop',
+                'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=200&h=200&fit=crop',
+                'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
+                'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=200&h=200&fit=crop',
+              ].map((img, i) => (
+                <div key={i} className="w-[180px] h-[120px] rounded-[20px] overflow-hidden flex-shrink-0 cursor-pointer relative group">
+                  <img src={img} alt={`Bricoleur ${i}`} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                </div>
+              ))}
+            </div>
+
+          </div>
+        </div>
+      </div>
+      
     </div>
   )
 }

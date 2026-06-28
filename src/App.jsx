@@ -12,6 +12,10 @@ import MarketplacePage from './pages/MarketplacePage'
 import PostTaskPage from './pages/PostTaskPage'
 import ChatPage from './pages/ChatPage'
 import ProfilePage from './pages/ProfilePage'
+import CategoryPage from './pages/CategoryPage'
+import TaskDetailsPage from './pages/TaskDetailsPage'
+import BookingPage from './pages/BookingPage'
+import RequestsPage from './pages/RequestsPage'
 
 // Notification Toast
 import { useApp } from './context/AppContext'
@@ -94,6 +98,14 @@ function AppRoutes() {
         <Route path="/chat/:chatId" element={<ProtectedRoute><ChatPage /></ProtectedRoute>} />
         <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
         <Route path="/profile/:userId" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+        <Route path="/task-details" element={<ProtectedRoute><TaskDetailsPage /></ProtectedRoute>} />
+        <Route path="/booking/:providerId" element={<ProtectedRoute><BookingPage /></ProtectedRoute>} />
+        <Route path="/requests" element={<ProtectedRoute><RequestsPage /></ProtectedRoute>} />
+        
+        {/* Dynamic Category Pages */}
+        {['bricolage', 'jardinage', 'demenagement', 'menage', 'enfants', 'animaux', 'informatique', 'aide', 'cours'].map(cat => (
+          <Route key={cat} path={`/${cat}`} element={<ProtectedRoute><CategoryPage /></ProtectedRoute>} />
+        ))}
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />

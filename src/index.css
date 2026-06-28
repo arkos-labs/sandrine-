@@ -3,35 +3,47 @@
 @theme {
   /* Fonts */
   --font-sans: 'Inter', -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-  --font-display: 'Inter', -apple-system, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  --font-display: 'Georgia', 'Iowan Old Style', 'Times New Roman', serif;
 
-  /* Colors: sobre, neutre, un seul accent discret */
-  --color-tx-primary: #2F6F5E;       /* Vert émeraude désaturé, sobre */
-  --color-tx-primary-hover: #265a4c;
-  --color-tx-primary-light: #EBF3F0;
+  /* Colors: palette naturelle — olive, terre, crème */
+  --color-tx-primary: #4C5943;       /* Vert olive / forêt */
+  --color-tx-primary-hover: #3C4A3E;
+  --color-tx-primary-light: #E8EDE4;
 
-  --color-tx-navy: #1A1D1F;          /* Encre quasi-noire, pas de bleu marine saturé */
-  --color-tx-navy-light: #32363A;
+  --color-tx-navy: #3C4A3E;          /* Vert olive très sombre pour les titres */
+  --color-tx-navy-light: #4C5943;
 
   /* Surfaces */
   --color-tx-bg: #FFFFFF;
-  --color-tx-bg-alt: #FAFAF9;        /* Gris neutre très clair */
+  --color-tx-bg-alt: #F4EFEA;        /* Beige crème chaud */
+  --color-tx-bg-warm: #EBE3D9;       /* Crème plus soutenu pour sections */
 
   /* Text */
-  --color-tx-text: #1A1D1F;
-  --color-tx-text-secondary: #62696D;
-  --color-tx-text-muted: #9AA0A3;
+  --color-tx-text: #3C4A3E;
+  --color-tx-text-secondary: #6B7365;
+  --color-tx-text-muted: #9BA395;
 
   /* Utilities */
-  --color-tx-border: #E6E7E5;
-  --color-tx-danger: #C0392B;
-  --color-tx-danger-light: #FBEEEC;
-  --color-tx-success: #2F6F5E;
-  --color-tx-success-light: #EBF3F0;
+  --color-tx-border: #D8D0C5;
+  --color-tx-danger: #A85B3E;        /* Terracotta pour les alertes/annonces */
+  --color-tx-danger-light: #FCECE6;
+  --color-tx-success: #3C4A3E;
+  --color-tx-success-light: #E8EDE4;
+
+  /* Accents pastel pour icônes de catégories */
+  --color-tx-accent-peach: #F6EBE5;
+  --color-tx-accent-sage: #E8EDE4;
+  --color-tx-accent-lavender: #EBE5ED;
+  --color-tx-accent-sand: #F4EFEA;
+
+  /* Couleurs du dégradé de marque (CTA) */
+  --color-tx-grad-1: #A85B3E;
+  --color-tx-grad-2: #856149;
+  --color-tx-grad-3: #4C5943;
 
   /* Shadows (très subtiles) */
-  --shadow-tx-card: 0 1px 2px rgba(20, 20, 20, 0.04), 0 1px 1px rgba(20, 20, 20, 0.03);
-  --shadow-tx-hover: 0 4px 12px rgba(20, 20, 20, 0.06), 0 2px 4px rgba(20, 20, 20, 0.04);
+  --shadow-tx-card: 0 1px 3px rgba(34, 28, 26, 0.05), 0 1px 2px rgba(34, 28, 26, 0.04);
+  --shadow-tx-hover: 0 8px 20px rgba(34, 28, 26, 0.08), 0 2px 6px rgba(34, 28, 26, 0.05);
 }
 
 /* ─── Base ─────────────────────────────────────────────────── */
@@ -50,7 +62,7 @@ body {
 
 h1, h2, h3, h4, .font-display {
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 600;
   color: var(--color-tx-navy);
 }
 
@@ -58,14 +70,14 @@ h1, h2, h3, h4, .font-display {
 .tx-card {
   background: var(--color-tx-bg);
   border: 1px solid var(--color-tx-border);
-  border-radius: 10px;
+  border-radius: 14px;
   padding: 24px;
   box-shadow: var(--shadow-tx-card);
   transition: box-shadow 0.2s, border-color 0.2s;
 }
 .tx-card:hover {
   box-shadow: var(--shadow-tx-hover);
-  border-color: #D9DBD8;
+  border-color: #D9C9B0;
 }
 
 /* ─── Typography ───────────────────────────────────────────── */
@@ -80,11 +92,11 @@ h1, h2, h3, h4, .font-display {
 
 /* ─── Buttons ──────────────────────────────────────────────── */
 .btn-primary {
-  background-color: var(--color-tx-navy);
+  background-color: var(--color-tx-primary);
   color: white;
   font-weight: 600;
   padding: 0.75rem 1.5rem;
-  border-radius: 8px;
+  border-radius: 10px;
   border: none;
   cursor: pointer;
   transition: background-color 0.15s;
@@ -94,16 +106,16 @@ h1, h2, h3, h4, .font-display {
   gap: 0.5rem;
 }
 .btn-primary:hover {
-  background-color: var(--color-tx-navy-light);
+  background-color: var(--color-tx-primary-hover);
 }
 .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
 
 .btn-secondary {
   background-color: white;
-  color: var(--color-tx-navy);
+  color: var(--color-tx-primary);
   font-weight: 600;
   padding: 0.75rem 1.5rem;
-  border-radius: 8px;
+  border-radius: 10px;
   border: 1px solid var(--color-tx-border);
   cursor: pointer;
   transition: all 0.15s;
@@ -113,15 +125,15 @@ h1, h2, h3, h4, .font-display {
   gap: 0.5rem;
 }
 .btn-secondary:hover {
-  background-color: var(--color-tx-bg-alt);
-  border-color: #C7C9C6;
+  background-color: var(--color-tx-primary-light);
+  border-color: var(--color-tx-primary);
 }
 
 .btn-ghost {
   color: var(--color-tx-text-secondary);
   font-weight: 500;
   padding: 0.5rem 1rem;
-  border-radius: 6px;
+  border-radius: 8px;
   background: transparent;
   cursor: pointer;
   transition: all 0.15s;
@@ -139,7 +151,7 @@ h1, h2, h3, h4, .font-display {
   width: 100%;
   background: white;
   border: 1px solid var(--color-tx-border);
-  border-radius: 8px;
+  border-radius: 10px;
   padding: 0.875rem 1rem;
   color: var(--color-tx-text);
   font-size: 1rem;
@@ -187,7 +199,7 @@ h1, h2, h3, h4, .font-display {
   font-size: 0.875rem;
   padding: 0.375rem 0.75rem;
   border: 1px solid var(--color-tx-border);
-  border-radius: 6px;
+  border-radius: 8px;
   transition: all 0.15s;
 }
 .skill-tag:hover {
@@ -232,7 +244,7 @@ h1, h2, h3, h4, .font-display {
 @keyframes spin { to { transform: rotate(360deg); } }
 
 .skeleton {
-  background: linear-gradient(90deg, #F1F5F9 25%, #E2E8F0 50%, #F1F5F9 75%);
+  background: linear-gradient(90deg, #F1EAD9 25%, #E7DBCB 50%, #F1EAD9 75%);
   background-size: 200% 100%;
   animation: shimmer 1.5s infinite;
   border-radius: 8px;

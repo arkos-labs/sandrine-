@@ -1,219 +1,195 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, Star, ShieldCheck, ArrowRight as ArrowRightIcon } from 'lucide-react'
+import { Search, Star, ShieldCheck, ArrowRight, Wrench, Leaf, Truck, SprayCan, Baby, PawPrint, Laptop, Home, BookOpen, MapPin } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import { TopNav } from '../components/TopNav'
 import { BottomNav } from '../components/BottomNav'
+import { Footer } from '../components/Footer'
 
-const POPULAR_SERVICES = [
-  {
-    id: 'bricolage',
-    label: 'Bricolage & réparation',
-    price: 'À partir de 15€/h',
-    bg: 'https://images.unsplash.com/photo-1581092918056-0c4c3acd3789?auto=format&fit=crop&w=600&q=80',
-    tags: ['Meubles', 'Réparations', 'Montage'],
-  },
-  {
-    id: 'informatique',
-    label: 'Assistance informatique',
-    price: 'À partir de 20€/h',
-    bg: 'https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80',
-    tags: ['Dépannage', 'Réseau', 'Installation'],
-  },
-  {
-    id: 'animaux',
-    label: 'Garde d’animaux',
-    price: 'À partir de 12€/h',
-    bg: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?auto=format&fit=crop&w=600&q=80',
-    tags: ['Chiens', 'Chats', 'Promenade'],
-  },
+const CATEGORIES = [
+  { id: 'bricolage', label: 'Bricolage', icon: Wrench },
+  { id: 'jardinage', label: 'Jardinage', icon: Leaf },
+  { id: 'demenagement', label: 'Déménagement', icon: Truck },
+  { id: 'menage', label: 'Ménage', icon: SprayCan },
+  { id: 'enfants', label: 'Enfants', icon: Baby },
+  { id: 'animaux', label: 'Animaux', icon: PawPrint },
+  { id: 'informatique', label: 'Informatique', icon: Laptop },
+  { id: 'aide', label: 'Aide à domicile', icon: Home },
+  { id: 'cours', label: 'Cours particuliers', icon: BookOpen },
 ]
 
-const TASKERS = [
-  { id: '1', name: 'Camille B.', skills: ['Bricolage', 'Montage'], rating: '4.9', reviews: '127 avis', price: 'À partir de 15€/h', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: '2', name: 'Marwan S.', skills: ['Informatique', 'Réseau'], rating: '4.8', reviews: '89 avis', price: 'À partir de 20€/h', img: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: '3', name: 'Léa D.', skills: ['Photographie', 'Vidéo'], rating: '5.0', reviews: '54 avis', price: 'À partir de 30€/h', img: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&h=200&q=80' },
+const JOBBERS = [
+  { id: '1', name: 'Stéphane', role: 'Jardinier', rating: '4.93', reviews: '444 avis', price: '25 €/h', img: 'https://images.unsplash.com/photo-1573865526739-10659fec78a5?auto=format&fit=crop&w=300&q=80', top: true, tags: ['Espace Safe', 'Respect des lieux', 'Allié'] },
+  { id: '2', name: 'Mame Diarra', role: 'Femme de ménage', rating: '4.88', reviews: '271 avis', price: '16 €/h', img: 'https://images.unsplash.com/photo-1531123897727-8f129e1bf98c?auto=format&fit=crop&w=300&q=80', top: false, tags: ['Résultat impeccable', 'Inclusif', 'Discret'] },
+  { id: '3', name: 'Ange', role: 'Bricolage', rating: '4.94', reviews: '431 avis', price: '30 €/h', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=300&q=80', top: true, tags: ['Bienveillance', 'LGBTQIA+', 'Efficace'] },
+  { id: '4', name: 'Emma', role: 'Pet-sitter', rating: '4.97', reviews: '31 avis', price: '10 €/h', img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=300&q=80', top: false, tags: ['Amoureuse des animaux', 'Safe Space'] },
 ]
 
 export default function HomePage() {
   const { verificationStatus } = useAuth()
   const navigate = useNavigate()
   const [searchQuery, setSearchQuery] = useState('')
+  const [placeholderIndex, setPlaceholderIndex] = useState(0)
+  
+  const placeholders = [
+    "Cours d'informatique", "Ranger du bois", "Fixer une étagère", 
+    "Monter un meuble", "Déménager", "Ménage"
+  ]
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setPlaceholderIndex((current) => (current + 1) % placeholders.length)
+    }, 3000)
+    return () => clearInterval(interval)
+  }, [])
 
   return (
-    <div className="min-h-screen bg-[--color-tx-bg] font-sans text-[--color-tx-text] selection:bg-[--color-tx-primary-light] selection:text-[--color-tx-navy]">
+    <div className="min-h-screen bg-[#F9FAFB] font-sans text-slate-800">
       <TopNav />
 
-      {/* Hero */}
-      <section className="border-b border-[--color-tx-border] px-4 pt-20 pb-24">
-        <div className="max-w-[760px] w-full mx-auto flex flex-col items-center text-center">
+      {/* Hero Section */}
+      <section className="relative pt-20 pb-32 md:pt-28 md:pb-40 flex flex-col items-center justify-center text-center">
+        {/* Background Image */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1543269865-cbf427effbad?auto=format&fit=crop&w=1920&q=80"
+            alt="Services à domicile inclusifs"
+            className="w-full h-[110%] object-cover object-center"
+          />
+          {/* Overlay gradient to darken the image slightly */}
+          <div className="absolute inset-0 bg-black/50"></div>
+        </div>
 
-          <div className="inline-flex items-center gap-2 mb-6 px-3 py-1.5 bg-[--color-tx-bg-alt] border border-[--color-tx-border] rounded-full text-xs font-medium text-[--color-tx-text-secondary]">
-            <ShieldCheck size={14} className="text-[--color-tx-primary]" />
-            Profils vérifiés par notre équipe
+        <div className="relative z-10 w-full px-4 max-w-4xl mx-auto flex flex-col items-center">
+          <div className="inline-flex items-center gap-3 mb-6 font-semibold tracking-[0.15em] text-[11px] uppercase text-white/90 bg-black/20 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/20">
+            <span className="w-2 h-2 rounded-full bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500" />
+            Entraide vérifiée · LGBT+ & Alliés
+            <span className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 via-yellow-500 to-red-500" />
           </div>
 
-          <h1 className="text-4xl md:text-6xl font-semibold leading-[1.1] mb-5 max-w-3xl font-display tracking-tight text-[--color-tx-navy] text-balance">
-            Votre entraide de confiance pour chaque besoin
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight shadow-sm leading-tight">
+            Le talent idéal, au sein<br className="hidden md:block" /> de notre communauté
           </h1>
-
-          <p className="text-base md:text-lg text-[--color-tx-text-secondary] mb-10 max-w-xl leading-relaxed">
-            Connecter la communauté LGBT+ avec des talents reconnus pour vos projets du quotidien.
+          
+          <p className="text-white/90 text-lg mb-10 max-w-2xl mx-auto">
+            Trouvez des prestataires vérifiés, dans un espace bienveillant, inclusif et sécurisé pour tous.
           </p>
 
-          <form
-            onSubmit={(e) => { e.preventDefault(); navigate('/marketplace') }}
-            className="w-full max-w-xl flex items-center gap-2 p-1.5 bg-white border border-[--color-tx-border] rounded-xl shadow-sm"
-          >
-            <Search className="text-[--color-tx-text-muted] ml-3 flex-shrink-0" size={18} aria-hidden="true" />
+          {/* Search Bar */}
+          <div className="w-full max-w-[600px] bg-white rounded-full p-2 flex items-center shadow-xl mb-6">
+            <div className="pl-4 text-slate-400">
+              <Search size={20} />
+            </div>
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              aria-label="Rechercher un service ou un membre"
-              placeholder="Bricolage, informatique, garde d'animaux..."
-              className="flex-1 bg-transparent border-none py-2.5 text-[--color-tx-text] placeholder:text-[--color-tx-text-muted] outline-none text-sm w-full min-w-0"
+              placeholder={placeholders[placeholderIndex]}
+              className="flex-1 bg-transparent border-none py-4 px-3 text-slate-800 placeholder:text-slate-400 outline-none text-lg transition-all"
             />
-            <button type="submit" className="btn-primary text-sm py-2.5 px-5 flex-shrink-0">
-              Rechercher
+            <button 
+              onClick={() => navigate('/marketplace')}
+              className="bg-[#0078FA] text-white p-4 rounded-full hover:bg-blue-600 transition-colors flex-shrink-0"
+            >
+              <ArrowRight size={20} />
             </button>
-          </form>
+          </div>
         </div>
       </section>
 
-      {/* Popular Services */}
-      <section className="py-20 px-4">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-semibold text-[--color-tx-navy] mb-2 font-display tracking-tight">Services populaires</h2>
-              <p className="text-[--color-tx-text-secondary] max-w-xl">Les catégories les plus demandées par la communauté.</p>
-            </div>
-            <button onClick={() => navigate('/marketplace')} className="text-sm font-medium text-[--color-tx-text-secondary] hover:text-[--color-tx-navy] transition-colors flex items-center gap-1.5 flex-shrink-0">
-              Tout voir <ArrowRightIcon size={14} />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 text-left">
-            {POPULAR_SERVICES.map((service, i) => (
-              <div
-                key={i}
-                className="relative h-[320px] rounded-xl overflow-hidden group cursor-pointer border border-[--color-tx-border]"
-                onClick={() => navigate('/marketplace')}
-              >
-                <img src={service.bg} alt={service.label} className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"></div>
-
-                <div className="absolute top-4 left-4 bg-white/95 text-[--color-tx-navy] text-xs font-semibold py-1.5 px-3 rounded-md">
-                  {service.price}
-                </div>
-
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="text-xl font-semibold text-white mb-3 tracking-tight">{service.label}</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {service.tags.map(tag => (
-                      <span key={tag} className="text-xs text-white/85 border border-white/25 rounded-md px-2.5 py-1">{tag}</span>
-                    ))}
-                  </div>
-                </div>
+      {/* Categories Row (Overlapping Hero) */}
+      <section className="relative z-20 px-4 -mt-16 mb-16 max-w-7xl mx-auto">
+        <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 flex gap-4 md:gap-8 overflow-x-auto snap-x no-scrollbar border border-slate-100">
+          {CATEGORIES.map(({ id, label, icon: Icon }) => (
+            <button 
+              key={id}
+              onClick={() => navigate('/' + id)}
+              className="flex flex-col items-center gap-3 min-w-[80px] snap-center group"
+            >
+              <div className="w-14 h-14 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-[#0078FA]/10 group-hover:text-[#0078FA] transition-colors text-slate-600">
+                <Icon size={24} strokeWidth={1.5} />
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Step by Step Guide */}
-      <section className="py-20 px-4 bg-[--color-tx-bg-alt] border-t border-b border-[--color-tx-border]">
-        <div className="max-w-[1200px] mx-auto grid lg:grid-cols-2 gap-16 items-start">
-          <div className="lg:sticky lg:top-28">
-            <h2 className="text-2xl md:text-4xl font-semibold text-[--color-tx-navy] mb-4 font-display leading-[1.15] tracking-tight">
-              Un guide simple pour vos besoins du quotidien
-            </h2>
-            <p className="text-base md:text-lg text-[--color-tx-text-secondary] leading-relaxed max-w-md">
-              Découvrez à quel point il est simple d'obtenir de l'aide professionnelle ou de proposer vos talents dans un espace sécurisé.
-            </p>
-          </div>
-
-          <div className="space-y-4">
-            {[
-              { num: '1', title: 'Choisissez votre service', desc: 'Parcourez notre large gamme de catégories et sélectionnez celle qui correspond à votre besoin : bricolage, soutien, informatique, et bien d’autres.' },
-              { num: '2', title: 'Réservez un talent', desc: 'Sélectionnez parmi nos membres vérifiés, lisez les avis et planifiez la prestation à l’heure qui vous convient le mieux.' },
-              { num: '3', title: 'Grandissons ensemble', desc: 'Détendez-vous pendant que le service est rendu avec bienveillance. Laissez un avis pour renforcer la solidarité communautaire.' },
-            ].map((step, i) => (
-              <div key={i} className="tx-card flex gap-5">
-                <div className="w-9 h-9 rounded-lg bg-[--color-tx-navy] text-white flex items-center justify-center font-semibold text-sm flex-shrink-0">
-                  {step.num}
-                </div>
-                <div>
-                  <h3 className="text-lg font-semibold text-[--color-tx-navy] mb-1.5 tracking-tight">{step.title}</h3>
-                  <p className="text-[--color-tx-text-secondary] leading-relaxed text-[15px]">{step.desc}</p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Top Rated Taskers */}
-      <section className="py-20 px-4">
-        <div className="max-w-[1200px] mx-auto">
-          <div className="flex items-end justify-between mb-10 flex-wrap gap-4">
-            <div>
-              <h2 className="text-2xl md:text-3xl font-semibold text-[--color-tx-navy] mb-2 font-display tracking-tight">Ils font vivre la communauté</h2>
-              <p className="text-[--color-tx-text-secondary] max-w-xl">Des membres reconnus pour leur bienveillance et la qualité de leur entraide.</p>
-            </div>
-            <button onClick={() => navigate('/marketplace')} className="text-sm font-medium text-[--color-tx-text-secondary] hover:text-[--color-tx-navy] transition-colors flex items-center gap-1.5 flex-shrink-0">
-              Tous les profils <ArrowRightIcon size={14} />
+              <span className="text-sm font-medium text-slate-700 whitespace-nowrap group-hover:text-[#0078FA] transition-colors">
+                {label}
+              </span>
             </button>
-          </div>
+          ))}
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {TASKERS.map((tasker, i) => (
-              <div key={i} className="tx-card flex flex-col h-full">
-                <div className="flex items-center gap-4 mb-6">
-                  <img src={tasker.img} alt={tasker.name} className="w-14 h-14 rounded-lg object-cover" />
-                  <div>
-                    <h3 className="font-semibold text-[--color-tx-navy] text-base tracking-tight mb-1 truncate">{tasker.name}</h3>
-                    <div className="flex items-center gap-1.5">
-                      <Star size={13} className="fill-[--color-tx-navy] text-[--color-tx-navy]" aria-hidden="true" />
-                      <span className="text-sm font-medium text-[--color-tx-text]">{tasker.rating}</span>
-                      <span className="text-[--color-tx-text-secondary] text-sm">· {tasker.reviews}</span>
-                    </div>
+      {/* Top Jobbers Section */}
+      <section className="py-12 px-4 max-w-7xl mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-10 text-slate-800">
+          Plus de 10 000 prestataires bienveillants, inclusifs et évalués
+        </h2>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {JOBBERS.map((jobber) => (
+            <div 
+              key={jobber.id} 
+              onClick={() => navigate('/marketplace')}
+              className="group cursor-pointer bg-white rounded-2xl overflow-hidden hover:shadow-xl transition-all duration-300 border border-slate-100"
+            >
+              {/* Image Container */}
+              <div className="relative aspect-square overflow-hidden">
+                <img 
+                  src={jobber.img} 
+                  alt={jobber.name} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
+                />
+                {jobber.top && (
+                  <div className="absolute bottom-3 right-3 bg-purple-600 text-white text-xs font-bold px-3 py-1.5 rounded-full shadow-md flex items-center gap-1.5">
+                    <Star size={12} className="fill-current" />
+                    Top prestataire
                   </div>
+                )}
+                {/* Subtle gradient at bottom for text contrast if needed */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+              </div>
+
+              {/* Content */}
+              <div className="p-5">
+                <div className="flex justify-between items-baseline mb-1">
+                  <h3 className="text-xl font-bold text-slate-800">{jobber.name}</h3>
+                  <span className="text-lg font-bold text-slate-800">{jobber.price}</span>
+                </div>
+                <p className="text-slate-500 text-sm mb-3">{jobber.role}</p>
+                
+                <div className="flex items-center gap-1.5 mb-4">
+                  <Star size={16} className="text-[#FFB800] fill-[#FFB800]" />
+                  <span className="font-bold text-slate-800">{jobber.rating}</span>
+                  <span className="text-slate-400 text-sm">({jobber.reviews})</span>
                 </div>
 
-                <div className="flex flex-wrap gap-2 mb-6">
-                  {tasker.skills.map(s => (
-                    <span key={s} className="skill-tag text-xs">{s}</span>
+                <div className="flex flex-wrap gap-2 mt-auto">
+                  {jobber.tags.map(tag => (
+                    <span key={tag} className="bg-slate-100 text-slate-600 text-xs font-medium px-2.5 py-1 rounded-full whitespace-nowrap">
+                      {tag}
+                    </span>
                   ))}
                 </div>
-
-                <div className="mt-auto pt-5 border-t border-[--color-tx-border] flex items-center justify-between">
-                  <span className="text-[--color-tx-text-secondary] text-sm font-medium">{tasker.price}</span>
-                  <button onClick={() => navigate('/marketplace')} className="btn-secondary text-sm py-2 px-4">
-                    Contacter
-                  </button>
-                </div>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
       </section>
 
-      {/* Verification CTA */}
+      {/* Verification CTA (If not verified) */}
       {verificationStatus !== 'approved' && (
-        <section className="bg-[--color-tx-navy] text-white py-16 px-4">
-          <div className="max-w-[640px] mx-auto text-center">
-            <div className="w-12 h-12 rounded-lg bg-white/10 flex items-center justify-center mx-auto mb-6">
-              <ShieldCheck size={22} />
-            </div>
-            <h2 className="text-2xl md:text-3xl font-semibold mb-3 tracking-tight">Rejoignez l'espace de confiance</h2>
-            <p className="text-white/65 text-base mb-8 max-w-md mx-auto leading-relaxed">
-              Complétez votre profil en vérifiant votre identité pour interagir, publier et réserver en toute sécurité.
+        <section className="py-16 px-4">
+          <div className="max-w-4xl mx-auto bg-slate-900 rounded-3xl p-8 md:p-12 text-center text-white relative overflow-hidden shadow-2xl">
+            {/* Decorative background circles */}
+            <div className="absolute top-0 right-0 -mr-16 -mt-16 w-64 h-64 rounded-full bg-gradient-to-br from-red-500/20 via-purple-500/20 to-blue-500/20 blur-3xl"></div>
+            <div className="absolute bottom-0 left-0 -ml-16 -mb-16 w-48 h-48 rounded-full bg-gradient-to-tr from-yellow-500/20 via-green-500/20 to-teal-500/20 blur-3xl"></div>
+            
+            <ShieldCheck size={48} className="mx-auto mb-6 text-white/90 relative z-10" />
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 relative z-10">Rejoignez l'espace bienveillant</h2>
+            <p className="text-slate-300 text-lg mb-8 max-w-2xl mx-auto relative z-10">
+              Vérifiez votre identité pour interagir, publier et réserver en toute sécurité au sein de la communauté LGBT+ et alliés.
             </p>
             <button
               onClick={() => navigate('/onboarding/verification')}
-              className="bg-white text-[--color-tx-navy] font-medium rounded-lg py-3 px-6 text-sm hover:bg-white/90 transition-colors"
+              className="relative z-10 bg-white text-slate-900 font-bold text-lg rounded-full py-4 px-8 hover:bg-slate-50 transition-colors shadow-md"
             >
               Vérifier mon identité
             </button>
@@ -221,7 +197,20 @@ export default function HomePage() {
         </section>
       )}
 
+      <Footer />
       <BottomNav />
+      
+      {/* Hide default scrollbar for the categories row */}
+      <style dangerouslySetInnerHTML={{__html: `
+        .no-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .no-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}} />
     </div>
   )
 }
+
