@@ -1,46 +1,29 @@
-import { Check, Clock, XCircle } from 'lucide-react'
-
-const statusConfig = {
-  approved: {
-    label: 'Vérifié·e',
-    className: 'badge-verified',
-    icon: Check,
-  },
-  pending: {
-    label: 'En attente',
-    className: 'badge-pending',
-    icon: Clock,
-  },
-  rejected: {
-    label: 'Refusé',
-    className: 'badge-rejected',
-    icon: XCircle,
-  },
-  unsubmitted: {
-    label: 'Non vérifié',
-    className: 'badge-rejected',
-    icon: XCircle,
-  },
-}
-
-export function VerifiedBadge({ status = 'unsubmitted', size = 'sm' }) {
-  const config = statusConfig[status] || statusConfig.unsubmitted
-  const Icon = config.icon
-
+import { Check, ShieldCheck, ShieldAlert, Shield } from 'lucide-react'
+export function VerifiedBadge({ status = 'unsubmitted', showText = true }) {
   if (status === 'approved') {
     return (
-      <span className={config.className}>
-        <Icon size={12} strokeWidth={2.5} /> {config.label}
-      </span>
+      <div className={`badge-verified inline-flex items-center justify-center`}>
+        <ShieldCheck size={14} className="flex-shrink-0" />
+        {showText && <span>Vérifié</span>}
+      </div>
+    )
+  }
+  
+  if (status === 'pending') {
+    return (
+      <div className={`badge-pending inline-flex items-center justify-center`}>
+        <Shield size={14} className="flex-shrink-0" />
+        {showText && <span>En attente</span>}
+      </div>
     )
   }
 
-  if (status === 'pending') {
+  if (status === 'rejected') {
     return (
-      <span className={config.className}>
-        <Icon size={12} strokeWidth={2} />
-        {config.label}
-      </span>
+      <div className={`inline-flex items-center justify-center gap-1 bg-[--color-tx-danger-light] text-[--color-tx-danger] text-[11px] font-bold px-2 py-0.5 rounded-full`}>
+        <ShieldAlert size={14} className="flex-shrink-0" />
+        {showText && <span>Refusé</span>}
+      </div>
     )
   }
 

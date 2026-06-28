@@ -1,66 +1,58 @@
-import { useLocation, useNavigate } from 'react-router-dom'
-import { Home, Search, PlusCircle, MessageCircle, User, LogOut } from 'lucide-react'
+import { useLocation, useNavigate, Link } from 'react-router-dom'
+import { Home, Search, PlusCircle, MessageCircle, User, LogOut, Bell, Menu } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
-
-const navItems = [
-  { path: '/', icon: Home, label: 'Accueil' },
-  { path: '/marketplace', icon: Search, label: 'Explorer' },
-  { path: '/post-task', icon: PlusCircle, label: 'Publier' },
-  { path: '/chat', icon: MessageCircle, label: 'Messages' },
-  { path: '/profile', icon: User, label: 'Profil' },
-]
+import { useApp } from '../context/AppContext'
 
 export function TopNav() {
-  const location = useLocation()
-  const navigate = useNavigate()
-  const { signOut, profile } = useAuth()
-
+  const { currentRole } = useApp()
+  const { user } = useAuth()
+  
   return (
-    <header className="hidden md:flex items-center justify-between px-8 py-5 border-b border-[--color-ks-gold-hairline] bg-[--color-ks-lacquer-black] sticky top-0 z-40">
-      {/* Logo */}
-      <button onClick={() => navigate('/')} className="flex items-center gap-2 transition-transform hover:opacity-80">
-        <span className="text-[--color-ks-kinpaku] font-display text-3xl font-light tracking-wide uppercase">SafeTask</span>
-      </button>
+    <header className="sticky top-0 z-50 bg-white border-b border-[--color-tx-border]">
+      <div className="max-w-[1200px] mx-auto px-4 h-16 flex items-center justify-between">
+        
+        {/* Logo */}
+        <Link to="/" className="flex items-center gap-2.5">
+          <div className="w-7 h-7 bg-[--color-tx-navy] rounded-md flex items-center justify-center">
+            <span className="text-white font-bold text-sm">Q</span>
+          </div>
+          <span className="font-display font-semibold text-[1.05rem] text-[--color-tx-navy] tracking-tight">Queer Service</span>
+        </Link>
 
-      {/* Nav links */}
-      <nav className="flex items-center gap-6">
-        {navItems.map(({ path, icon: Icon, label }) => {
-          const isActive = path === '/'
-            ? location.pathname === '/'
-            : location.pathname.startsWith(path)
-          return (
-            <button
-              key={path}
-              onClick={() => navigate(path)}
-              className={`flex items-center gap-2 text-sm transition-all duration-300 ${
-                isActive
-                  ? 'text-[--color-ks-kinpaku] font-medium'
-                  : 'text-[--color-ks-text-muted] hover:text-[--color-ks-champagne] font-normal'
-              }`}
-            >
-              <Icon size={18} strokeWidth={isActive ? 2 : 1.5} />
-              <span className="font-sans">{label}</span>
-            </button>
-          )
-        })}
-      </nav>
+        {/* Desktop Search */}
+        <div className="hidden md:flex flex-1 max-w-md mx-8 items-center gap-2.5 px-3.5 py-2 bg-[--color-tx-bg-alt] border border-[--color-tx-border] rounded-lg">
+          <Search className="text-[--color-tx-text-muted] flex-shrink-0" size={16} />
+          <input
+            type="text"
+            placeholder="Quel service recherchez-vous ?"
+            className="w-full bg-transparent border-none py-0.5 text-sm text-[--color-tx-text] placeholder:text-[--color-tx-text-muted] outline-none"
+          />
+        </div>
 
-      {/* Right: avatar + logout */}
-      <div className="flex items-center gap-5">
-        <div className="text-right hidden lg:block">
-          <p className="text-sm font-sans font-medium text-[--color-ks-champagne]">{profile?.full_name || 'Mon profil'}</p>
-          <p className="text-xs font-mono tracking-widest uppercase text-[--color-ks-text-faint] mt-1">{profile?.is_tasker ? 'Client & Pro' : 'Client'}</p>
+        {/* Actions */}
+        <div className="flex items-center gap-1">
+          <button className="md:hidden w-10 h-10 flex items-center justify-center text-[--color-tx-text-secondary] hover:text-[--color-tx-text] transition-colors">
+            <Search size={20} />
+          </button>
+          <button className="w-10 h-10 flex items-center justify-center text-[--color-tx-text-secondary] hover:text-[--color-tx-text] transition-colors relative">
+            <Bell size={20} />
+            <span className="absolute top-2 right-2 w-1.5 h-1.5 bg-[--color-tx-danger] rounded-full"></span>
+          </button>
+
+          <button className="md:hidden w-10 h-10 flex items-center justify-center text-[--color-tx-text-secondary] hover:text-[--color-tx-text] transition-colors">
+            <Menu size={22} />
+          </button>
+
+          <div className="hidden md:flex items-center gap-3 ml-2 pl-4 border-l border-[--color-tx-border] h-8">
+            <Link to="/post-task" className="bg-[--color-tx-navy] text-white font-medium px-4 py-2 rounded-md text-sm hover:bg-[--color-tx-navy-light] transition-colors">
+              Publier une annonce
+            </Link>
+            <div className="w-8 h-8 rounded-full border border-[--color-tx-border] text-[--color-tx-navy] flex items-center justify-center font-semibold text-sm bg-[--color-tx-bg-alt]">
+              {user?.id !== 'guest' ? 'U' : 'G'}
+            </div>
+          </div>
         </div>
-        <div className="w-10 h-10 rounded-full bg-[--color-ks-lacquer-deep] border border-[--color-ks-gold-hairline] flex items-center justify-center text-[--color-ks-kinpaku] font-sans font-medium">
-          {profile?.full_name?.[0]?.toUpperCase() || '?'}
-        </div>
-        <button
-          onClick={signOut}
-          className="p-2 text-[--color-ks-text-muted] hover:text-[--color-ks-vermilion] transition-colors"
-          title="Se déconnecter"
-        >
-          <LogOut size={20} strokeWidth={1.5} />
-        </button>
+        
       </div>
     </header>
   )
