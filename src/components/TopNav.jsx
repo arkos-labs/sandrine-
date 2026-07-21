@@ -15,14 +15,14 @@ export function TopNav() {
 
 
       <header className="sticky top-0 z-50 bg-black border-b border-white/10 shadow-md">
-        <div className="w-full mx-auto px-6 md:px-8 h-[110px] flex items-center justify-between relative">
-          
+        <div className="w-full mx-auto px-6 md:px-8 h-[130px] md:h-[150px] flex items-center justify-between relative">
+
           {/* Left Spacer */}
           <div className="flex-1"></div>
 
           {/* Center Logo */}
           <Link to="/" className="flex-shrink-0 flex items-center justify-center gap-1 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <img src="/logo.png" alt="Queer Service" className="w-[200px] md:w-[350px] h-auto object-contain" />
+            <img src="/logo.png" alt="Queer Service" className="h-[96px] md:h-[116px] w-auto object-contain" />
           </Link>
 
           {/* Right Actions */}
