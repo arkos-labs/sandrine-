@@ -5,6 +5,7 @@ import { useAuth } from '../context/AuthContext'
 import { TopNav } from '../components/TopNav'
 import { BottomNav } from '../components/BottomNav'
 import { Footer } from '../components/Footer'
+import { RainbowCategories } from '../components/RainbowCategories'
 
 const CATEGORIES = [
   { id: 'bricolage', label: 'Bricolage', icon: Wrench },
@@ -57,26 +58,35 @@ export default function HomePage() {
             className="w-full h-[110%] object-cover object-center"
           />
           {/* Overlay gradient to darken the image slightly */}
-          <div className="absolute inset-0 bg-black/50"></div>
+          <div className="absolute inset-0 bg-black/70"></div>
         </div>
 
-        <div className="relative z-10 w-full px-4 max-w-4xl mx-auto flex flex-col items-center">
-          <div className="inline-flex items-center gap-3 mb-6 font-semibold tracking-[0.15em] text-[11px] uppercase text-white/90 bg-black/20 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/20">
+        <div className="relative z-10 w-full flex flex-col items-center">
+          <div className="w-full px-4 max-w-4xl mx-auto flex flex-col items-center">
+            <div className="inline-flex items-center gap-3 mb-6 font-semibold tracking-[0.15em] text-[11px] uppercase text-white/90 bg-black/40 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/20">
             <span className="w-2 h-2 rounded-full bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500" />
             Entraide vérifiée · LGBT+ & Alliés
             <span className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 via-yellow-500 to-red-500" />
           </div>
+          </div> {/* End max-w-4xl */}
 
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight shadow-sm leading-tight">
-            Le talent idéal, au sein<br className="hidden md:block" /> de notre communauté
-          </h1>
-          
-          <p className="text-white/90 text-lg mb-10 max-w-2xl mx-auto">
-            Trouvez des prestataires vérifiés, dans un espace bienveillant, inclusif et sécurisé pour tous.
-          </p>
+          <div className="w-full relative mt-4">
+            <RainbowCategories />
+          </div>
+
+          {/* Text and Search Bar pulled up inside the Rainbow */}
+          <div className="w-full px-4 max-w-4xl mx-auto flex flex-col items-center relative z-30 pointer-events-none md:-mt-[35%] lg:-mt-[30%]">
+            <h1 className="pointer-events-auto text-4xl md:text-5xl lg:text-6xl font-extrabold !text-white mb-4 tracking-tight drop-shadow-lg leading-tight">
+              Le talent idéal, au sein<br className="hidden md:block" /> de notre communauté
+            </h1>
+            
+            <p className="pointer-events-auto text-white/90 text-lg mb-8 max-w-2xl mx-auto font-medium">
+              Trouvez des prestataires vérifiés, dans un espace bienveillant, inclusif et sécurisé pour tous.
+            </p>
 
           {/* Search Bar */}
-          <div className="w-full max-w-[600px] bg-white rounded-full p-2 flex items-center shadow-xl mb-6">
+          <div className="pointer-events-auto w-full max-w-[600px] mx-auto flex flex-col items-center relative z-30 mb-6">
+            <div className="w-full bg-white rounded-full p-2 flex items-center shadow-2xl">
             <div className="pl-4 text-slate-400">
               <Search size={20} />
             </div>
@@ -93,29 +103,35 @@ export default function HomePage() {
             >
               <ArrowRight size={20} />
             </button>
+            </div>
+          </div>
           </div>
         </div>
       </section>
 
-      {/* Categories Row (Overlapping Hero) */}
-      <section className="relative z-20 px-4 -mt-16 mb-16 max-w-7xl mx-auto">
-        <div className="bg-white rounded-2xl shadow-lg p-4 md:p-6 flex gap-4 md:gap-8 overflow-x-auto snap-x no-scrollbar border border-slate-100">
+      {/* Categories Row (Overlapping Hero) - Mobile Only */}
+      <section className="relative z-20 px-4 -mt-16 mb-8 max-w-7xl mx-auto md:hidden">
+        <div className="bg-white rounded-2xl shadow-lg p-4 flex gap-4 overflow-x-auto snap-x no-scrollbar border border-slate-100">
           {CATEGORIES.map(({ id, label, icon: Icon }) => (
             <button 
               key={id}
               onClick={() => navigate('/' + id)}
               className="flex flex-col items-center gap-3 min-w-[80px] snap-center group"
             >
-              <div className="w-14 h-14 rounded-full bg-slate-50 flex items-center justify-center group-hover:bg-[#0078FA]/10 group-hover:text-[#0078FA] transition-colors text-slate-600">
-                <Icon size={24} strokeWidth={1.5} />
+              <div className="relative w-14 h-14 rounded-full bg-slate-50 flex items-center justify-center text-slate-600 overflow-hidden shadow-sm hover:shadow-md transition-all duration-300">
+                <div className="absolute inset-0 bg-rainbow-animated opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative z-10 group-hover:text-white transition-colors duration-300">
+                  <Icon size={24} strokeWidth={1.5} />
+                </div>
               </div>
-              <span className="text-sm font-medium text-slate-700 whitespace-nowrap group-hover:text-[#0078FA] transition-colors">
+              <span className="text-sm font-medium text-slate-700 whitespace-nowrap transition-colors duration-300">
                 {label}
               </span>
             </button>
           ))}
         </div>
       </section>
+
 
       {/* Top Jobbers Section */}
       <section className="py-12 px-4 max-w-7xl mx-auto">
