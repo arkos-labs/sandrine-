@@ -262,3 +262,24 @@ h1, h2, h3, h4, .font-display {
   background-size: 200% auto;
   animation: rainbow-bg 3s linear infinite;
 }
+
+/* Animations pour l'arc-en-ciel */
+@keyframes drawArc {
+  from { stroke-dashoffset: 1260; }
+  to { stroke-dashoffset: 0; }
+}
+.animate-arc {
+  stroke-dasharray: 1260;
+  stroke-dashoffset: 1260;
+  animation: drawArc 1.5s ease-out forwards;
+}
+
+@keyframes popInArc {
+  0% { opacity: 0; transform: translate(-50%, -50%) scale(0); }
+  70% { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  100% { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+}
+.animate-pop-arc {
+  opacity: 0;
+  animation: popInArc 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}

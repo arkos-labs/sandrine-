@@ -57,54 +57,50 @@ export default function HomePage() {
             alt="Services à domicile inclusifs"
             className="w-full h-[110%] object-cover object-center"
           />
-          {/* Overlay gradient to darken the image slightly */}
-          <div className="absolute inset-0 bg-black/70"></div>
+          {/* Overlay gradient to lighten the image slightly */}
+          <div className="absolute inset-0 bg-white/60 backdrop-blur-[2px]"></div>
         </div>
 
-        <div className="relative z-10 w-full flex flex-col items-center">
-          <div className="w-full px-4 max-w-4xl mx-auto flex flex-col items-center">
-            <div className="inline-flex items-center gap-3 mb-6 font-semibold tracking-[0.15em] text-[11px] uppercase text-white/90 bg-black/40 backdrop-blur-sm px-4 py-1.5 rounded-full border border-white/20">
-            <span className="w-2 h-2 rounded-full bg-gradient-to-r from-red-500 via-yellow-500 to-blue-500" />
-            Entraide vérifiée · LGBT+ & Alliés
-            <span className="w-2 h-2 rounded-full bg-gradient-to-r from-blue-500 via-yellow-500 to-red-500" />
-          </div>
-          </div> {/* End max-w-4xl */}
+        <div className="relative z-10 w-full flex flex-col items-center mt-4">
+          
+          {/* Text Container without card styling */}
+          <div className="flex flex-col items-center text-center w-[92%] max-w-3xl mb-8 mt-4">
+            
 
-          <div className="w-full relative mt-4">
-            <RainbowCategories />
-          </div>
 
-          {/* Text and Search Bar pulled up inside the Rainbow */}
-          <div className="w-full px-4 max-w-4xl mx-auto flex flex-col items-center relative z-30 pointer-events-none md:-mt-[35%] lg:-mt-[30%]">
-            <h1 className="pointer-events-auto text-4xl md:text-5xl lg:text-6xl font-extrabold !text-white mb-4 tracking-tight drop-shadow-lg leading-tight">
+            <h1 className="text-3xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight leading-tight">
               Le talent idéal, au sein<br className="hidden md:block" /> de notre communauté
             </h1>
             
-            <p className="pointer-events-auto text-white/90 text-lg mb-8 max-w-2xl mx-auto font-medium">
+            <p className="text-slate-600 text-base md:text-lg max-w-xl mx-auto font-medium">
               Trouvez des prestataires vérifiés, dans un espace bienveillant, inclusif et sécurisé pour tous.
             </p>
+          </div>
 
           {/* Search Bar */}
-          <div className="pointer-events-auto w-full max-w-[600px] mx-auto flex flex-col items-center relative z-30 mb-6">
-            <div className="w-full bg-white rounded-full p-2 flex items-center shadow-2xl">
-            <div className="pl-4 text-slate-400">
-              <Search size={20} />
-            </div>
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder={placeholders[placeholderIndex]}
-              className="flex-1 bg-transparent border-none py-4 px-3 text-slate-800 placeholder:text-slate-400 outline-none text-lg transition-all"
-            />
-            <button 
-              onClick={() => navigate('/marketplace')}
-              className="bg-[#0078FA] text-white p-4 rounded-full hover:bg-blue-600 transition-colors flex-shrink-0"
-            >
-              <ArrowRight size={20} />
-            </button>
+          <div className="w-[92%] max-w-[600px] mx-auto flex flex-col items-center relative z-30 mb-10 mt-4">
+            <div className="w-full bg-white rounded-[28px] p-2 flex items-center shadow-xl border border-slate-100">
+              <div className="pl-4 text-slate-800">
+                <Search size={22} strokeWidth={2.5} />
+              </div>
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder={placeholders[placeholderIndex]}
+                className="flex-1 bg-transparent border-none py-4 px-3 text-slate-800 placeholder:text-slate-500 outline-none text-[15px] transition-all"
+              />
+              <button 
+                onClick={() => navigate('/marketplace')}
+                className="bg-[#5B21B6] text-white p-3.5 rounded-full hover:bg-purple-800 transition-colors flex-shrink-0 shadow-md"
+              >
+                <ArrowRight size={22} strokeWidth={2.5} />
+              </button>
             </div>
           </div>
+
+          <div className="w-full relative px-4">
+            <RainbowCategories />
           </div>
         </div>
       </section>

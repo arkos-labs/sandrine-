@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { Search, MapPin, Star, Clock, Briefcase, Users, ShieldCheck, Heart, ChevronDown } from 'lucide-react'
+import { Search, MapPin, Star, Clock, Briefcase, Users, ShieldCheck, Heart, ChevronDown, CheckCircle, Shield, Award, Calendar } from 'lucide-react'
 import { useApp } from '../context/AppContext'
 import { TopNav } from '../components/TopNav'
 import { BottomNav } from '../components/BottomNav'
@@ -18,14 +18,14 @@ const CATEGORIES = [
 ]
 
 const MOCK_TASKERS = [
-  { id: '1', full_name: 'Camille B.', bio: 'Montage de meubles, fixations, petites réparations. Ponctuelle et soignée.', skills: ['Bricolage', 'Montage'], hourly_rate: 15, category: 'Bricolage', rating: 4.9, reviews: 127, distance: '1,2 km', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: '2', full_name: 'Marwan S.', bio: 'Dépannage informatique, configuration réseau et installation à domicile.', skills: ['Informatique', 'Réseau'], hourly_rate: 20, category: 'Informatique', rating: 4.8, reviews: 89, distance: '2,4 km', img: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: '3', full_name: 'Yanis K.', bio: 'Garde et promenade d’animaux, à domicile ou en pension de jour.', skills: ['Animaux', 'Promenade'], hourly_rate: 12, category: 'Garde d’animaux', rating: 4.7, reviews: 63, distance: '3,1 km', img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: '4', full_name: 'Inès M.', bio: 'Ménage régulier ou ponctuel, repassage soigné. Produits écologiques.', skills: ['Ménage', 'Repassage'], hourly_rate: 14, category: 'Ménage', rating: 5.0, reviews: 41, distance: '1,8 km', img: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: '5', full_name: 'Léa D.', bio: 'Photographe passionnée, spécialisée dans les portraits et événements.', skills: ['Photographie', 'Vidéo'], hourly_rate: 30, category: 'Photographie', rating: 5.0, reviews: 54, distance: '4,0 km', img: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: '6', full_name: 'Sacha P.', bio: 'Soutien scolaire en mathématiques et physique pour collégiens et lycéens.', skills: ['Maths', 'Physique'], hourly_rate: 25, category: 'Soutien scolaire', rating: 4.8, reviews: 41, distance: '2,9 km', img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: '7', full_name: 'Thomas R.', bio: 'Aide au déménagement, port de charges lourdes et montage avec camionnette.', skills: ['Manutention', 'Transport'], hourly_rate: 22, category: 'Déménagement', rating: 4.9, reviews: 112, distance: '5,0 km', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&h=200&q=80' },
-  { id: '8', full_name: 'Sophie L.', bio: 'Entretien de votre jardin, tonte de pelouse et taille de haies.', skills: ['Jardinage', 'Plantes'], hourly_rate: 18, category: 'Jardinage', rating: 4.6, reviews: 34, distance: '6,2 km', img: 'https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&w=200&h=200&q=80' },
+  { id: '1', full_name: 'Camille B.', bio: 'Montage de meubles, fixations, petites réparations. Ponctuelle et soignée.', skills: ['Bricolage', 'Montage'], hourly_rate: 15, category: 'Bricolage', rating: 4.9, reviews: 127, distance: '1,2 km', img: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&h=200&q=80', is_verified: true, signed_charter: true, is_safe_space: true, last_check: 'Aujourd\'hui' },
+  { id: '2', full_name: 'Marwan S.', bio: 'Dépannage informatique, configuration réseau et installation à domicile.', skills: ['Informatique', 'Réseau'], hourly_rate: 20, category: 'Informatique', rating: 4.8, reviews: 89, distance: '2,4 km', img: 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=200&h=200&q=80', is_verified: true, signed_charter: true, is_safe_space: true, last_check: 'Hier' },
+  { id: '3', full_name: 'Yanis K.', bio: 'Garde et promenade d’animaux, à domicile ou en pension de jour.', skills: ['Animaux', 'Promenade'], hourly_rate: 12, category: 'Garde d’animaux', rating: 4.7, reviews: 63, distance: '3,1 km', img: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&h=200&q=80', is_verified: true, signed_charter: false, is_safe_space: false, last_check: 'Il y a 3j' },
+  { id: '4', full_name: 'Inès M.', bio: 'Ménage régulier ou ponctuel, repassage soigné. Produits écologiques.', skills: ['Ménage', 'Repassage'], hourly_rate: 14, category: 'Ménage', rating: 5.0, reviews: 41, distance: '1,8 km', img: 'https://images.unsplash.com/photo-1487412947147-5cebf100ffc2?auto=format&fit=crop&w=200&h=200&q=80', is_verified: true, signed_charter: true, is_safe_space: true, last_check: 'Aujourd\'hui' },
+  { id: '5', full_name: 'Léa D.', bio: 'Photographe passionnée, spécialisée dans les portraits et événements.', skills: ['Photographie', 'Vidéo'], hourly_rate: 30, category: 'Photographie', rating: 5.0, reviews: 54, distance: '4,0 km', img: 'https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=200&h=200&q=80', is_verified: true, signed_charter: true, is_safe_space: true, last_check: 'Semaine dernière' },
+  { id: '6', full_name: 'Sacha P.', bio: 'Soutien scolaire en mathématiques et physique pour collégiens et lycéens.', skills: ['Maths', 'Physique'], hourly_rate: 25, category: 'Soutien scolaire', rating: 4.8, reviews: 41, distance: '2,9 km', img: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=200&h=200&q=80', is_verified: false, signed_charter: true, is_safe_space: false, last_check: 'Il y a 2j' },
+  { id: '7', full_name: 'Thomas R.', bio: 'Aide au déménagement, port de charges lourdes et montage avec camionnette.', skills: ['Manutention', 'Transport'], hourly_rate: 22, category: 'Déménagement', rating: 4.9, reviews: 112, distance: '5,0 km', img: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&h=200&q=80', is_verified: true, signed_charter: true, is_safe_space: true, last_check: 'Aujourd\'hui' },
+  { id: '8', full_name: 'Sophie L.', bio: 'Entretien de votre jardin, tonte de pelouse et taille de haies.', skills: ['Jardinage', 'Plantes'], hourly_rate: 18, category: 'Jardinage', rating: 4.6, reviews: 34, distance: '6,2 km', img: 'https://images.unsplash.com/photo-1548142813-c348350df52b?auto=format&fit=crop&w=200&h=200&q=80', is_verified: true, signed_charter: false, is_safe_space: false, last_check: 'Hier' },
 ]
 
 const MOCK_TASKS = [
@@ -68,7 +68,29 @@ function TaskerCard({ tasker, onClick }) {
 
       <p className="text-[--color-tx-text-secondary] text-[13px] leading-relaxed mb-4 line-clamp-2">{tasker.bio}</p>
 
-      <div className="flex flex-wrap gap-2 mb-8">
+      {/* Badges de confiance */}
+      <div className="flex flex-col gap-1.5 mb-4">
+        {tasker.is_verified && (
+          <div className="flex items-center gap-2 text-xs text-emerald-700 bg-emerald-50 w-fit px-2.5 py-1 rounded-md">
+            <CheckCircle size={14} />
+            <span className="font-semibold">Identité vérifiée</span>
+          </div>
+        )}
+        {tasker.signed_charter && (
+          <div className="flex items-center gap-2 text-xs text-purple-700 bg-purple-50 w-fit px-2.5 py-1 rounded-md">
+            <Shield size={14} />
+            <span className="font-semibold">Charte LGBT+ & Alliés</span>
+          </div>
+        )}
+        {tasker.is_safe_space && (
+          <div className="flex items-center gap-2 text-xs text-orange-700 bg-orange-50 w-fit px-2.5 py-1 rounded-md">
+            <Award size={14} />
+            <span className="font-semibold">Badge Safe Space</span>
+          </div>
+        )}
+      </div>
+
+      <div className="flex flex-wrap gap-2 mb-6">
         {tasker.skills.map(s => (
           <span key={s} className="bg-[#F4EFEA] text-[--color-tx-text-secondary] font-semibold text-[11px] px-3 py-1 rounded-full">
             {s}

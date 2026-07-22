@@ -1,11 +1,11 @@
 {
-  "name": "SafeTask — Safe Space Services",
-  "short_name": "SafeTask",
+  "name": "Queer Services",
+  "short_name": "Queer Services",
   "description": "Marketplace LGBTQIA+ inclusive pour services à domicile vérifiés",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0F172A",
-  "theme_color": "#4F46E5",
+  "background_color": "#000000",
+  "theme_color": "#6b21a8",
   "orientation": "portrait",
   "icons": [
     {

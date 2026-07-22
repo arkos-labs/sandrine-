@@ -14,15 +14,15 @@ export function TopNav() {
     <>
 
 
-      <header className="sticky top-0 z-50 bg-black border-b border-white/10 shadow-md">
-        <div className="w-full mx-auto px-6 md:px-8 h-[130px] md:h-[150px] flex items-center justify-between relative">
+      <header className="sticky top-0 z-50 bg-black border-b border-white/10 shadow-sm">
+        <div className="w-full mx-auto px-4 md:px-8 h-[90px] flex items-center justify-between relative">
 
           {/* Left Spacer */}
           <div className="flex-1"></div>
 
           {/* Center Logo */}
           <Link to="/" className="flex-shrink-0 flex items-center justify-center gap-1 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
-            <img src="/logo.png" alt="Queer Service" className="h-[96px] md:h-[116px] w-auto object-contain" />
+            <img src="/logo.png" alt="Queer Service" className="w-[120px] md:w-[180px] h-auto object-contain" />
           </Link>
 
           {/* Right Actions */}
@@ -30,17 +30,18 @@ export function TopNav() {
             {profile?.full_name ? (
               <Link 
                 to="/profile" 
-                className="flex items-center gap-2 text-[14px] font-bold tracking-widest uppercase text-white hover:text-white/80 transition-all border border-white/30 px-5 py-2.5 rounded-full hover:border-white/80 hover:bg-white/10"
+                className="flex items-center gap-2 text-[12px] font-bold tracking-widest uppercase text-[#5B21B6] bg-white transition-all border border-[#5B21B6] px-4 py-2 rounded-full hover:bg-purple-50 shadow-sm"
               >
-                <User size={18} />
+                <User size={16} />
                 <span className="hidden sm:inline">Mon Profil</span>
+                <span className="sm:hidden">Mon Profil</span>
               </Link>
             ) : (
               <Link 
                 to="/auth" 
-                className="flex items-center gap-2 text-[14px] font-bold tracking-widest uppercase text-white hover:text-white/80 transition-all border border-white/30 px-5 py-2.5 rounded-full hover:border-white/80 hover:bg-white/10"
+                className="flex items-center gap-2 text-[12px] font-bold tracking-widest uppercase text-[#5B21B6] bg-white transition-all border border-[#5B21B6] px-4 py-2 rounded-full hover:bg-purple-50 shadow-sm"
               >
-                <User size={18} />
+                <User size={16} />
                 <span>S'identifier</span>
               </Link>
             )}

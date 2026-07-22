@@ -20,6 +20,7 @@ import RequestsPage from './pages/RequestsPage'
 // Notification Toast
 import { useApp } from './context/AppContext'
 import { CheckCircle, AlertCircle, Info, X } from 'lucide-react'
+import { BottomNav } from './components/BottomNav'
 
 function Toast() {
   const { notification } = useApp()
@@ -103,13 +104,14 @@ function AppRoutes() {
         <Route path="/requests" element={<ProtectedRoute><RequestsPage /></ProtectedRoute>} />
         
         {/* Dynamic Category Pages */}
-        {['bricolage', 'jardinage', 'demenagement', 'menage', 'enfants', 'animaux', 'informatique', 'aide', 'cours'].map(cat => (
+        {['maison', 'sante', 'pro', 'shopping', 'entraide', 'communaute'].map(cat => (
           <Route key={cat} path={`/${cat}`} element={<ProtectedRoute><CategoryPage /></ProtectedRoute>} />
         ))}
 
         {/* Fallback */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <BottomNav />
     </>
   )
 }
