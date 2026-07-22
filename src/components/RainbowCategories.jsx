@@ -51,27 +51,26 @@ export function RainbowCategories() {
     const items = selectedDomain ? selectedDomain.subCategories : CATEGORIES;
     const totalIcons = items.length;
     
-    // Spread evenly across the arc
-    const startAngle = 175;
-    const endAngle = 5;
+    // Spread evenly across the arc (180 to 0 degrees for perfect half-circle)
+    const startAngle = 180;
+    const endAngle = 0;
     const angleStep = (startAngle - endAngle) / (totalIcons - 1 || 1);
 
     return items.map((item, index) => {
       const angleDeg = startAngle - index * angleStep;
       const angleRad = (angleDeg * Math.PI) / 180;
       
-      const r = 400; 
       const cx = 500;
-      const cy = 480;
-
-      const x = cx + r * Math.cos(angleRad);
-      const y = cy - r * Math.sin(angleRad);
-      
-      const posX = (x / 1000) * 100;
-      const posY = (y / 500) * 100;
+      const cy = 480; // The arc center is at y=480
       
       if (!selectedDomain) {
-        // Main Domain Button
+        // Main Domain Button : exactly on the arc (r = 400)
+        const r = 400; 
+        const x = cx + r * Math.cos(angleRad);
+        const y = cy - r * Math.sin(angleRad);
+        const posX = (x / 1000) * 100;
+        const posY = (y / 500) * 100;
+
         const cat = item;
         return (
           <button 
@@ -93,7 +92,13 @@ export function RainbowCategories() {
           </button>
         );
       } else {
-        // Subcategory Button (smaller, no icon, just a pill)
+        // Subcategory Button (smaller, no icon, perfectly on the arc)
+        const r = 400;
+        const x = cx + r * Math.cos(angleRad);
+        const y = cy - r * Math.sin(angleRad);
+        const posX = (x / 1000) * 100;
+        const posY = (y / 500) * 100;
+
         const sub = item;
         return (
           <button 
@@ -116,8 +121,9 @@ export function RainbowCategories() {
   };
 
   return (
-    <div className="relative w-full max-w-[800px] mx-auto mt-4 px-2 pb-16 overflow-visible">
-      <div className="relative w-full pb-[60%]">
+    <div className="relative w-full max-w-[800px] mx-auto mt-8 px-2 pb-16 overflow-visible">
+      {/* Container aspect ratio for the arc matched to SVG viewBox 1000x500 (2:1 -> 50%) */}
+      <div className="relative w-full pb-[50%]">
         
         {/* SVG Arc Line */}
         <svg 
