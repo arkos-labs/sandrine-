@@ -101,19 +101,24 @@ export function RainbowCategories() {
         const posX = (x / 1000) * 100;
         const posY = (y / 650) * 100;
 
+        // Rotation calculation for the "Sun" effect
+        // 90 - angleDeg keeps the text mostly upright and radiating along the arc
+        const rotation = 90 - angleDeg;
+
         const sub = item;
         return (
           <button 
             key={sub}
             onClick={() => navigate(`/marketplace?category=${encodeURIComponent(sub)}`)}
-            className="absolute group flex flex-col items-center justify-center -translate-x-1/2 -translate-y-1/2 transition-transform hover:scale-110 duration-300 z-20 animate-pop-arc"
+            className="absolute group flex flex-col items-center justify-center z-20 animate-pop-arc origin-center transition-all hover:scale-110"
             style={{ 
               left: `${posX}%`, 
               top: `${posY}%`,
+              transform: `translate(-50%, -50%) rotate(${rotation}deg)`,
               animationDelay: `${index * 0.03}s` 
             }}
           >
-            <span className="text-[9px] md:text-[10px] font-bold text-[#5B21B6] bg-white border border-slate-200 px-2 py-1 md:px-2.5 md:py-1.5 rounded-full whitespace-nowrap shadow-lg hover:border-[#5B21B6] hover:bg-purple-50 transition-colors">
+            <span className="text-[9px] md:text-[10px] font-bold text-[#5B21B6] bg-white border border-slate-200 px-2 py-1 md:px-2.5 md:py-1.5 rounded-full whitespace-nowrap shadow-lg group-hover:border-[#5B21B6] group-hover:bg-purple-50 transition-colors">
               {sub}
             </span>
           </button>
