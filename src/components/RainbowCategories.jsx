@@ -51,26 +51,28 @@ export function RainbowCategories() {
     const items = selectedDomain ? selectedDomain.subCategories : CATEGORIES;
     const totalIcons = items.length;
     
-    // Spread evenly across the arc (180 to 0 degrees for perfect half-circle)
-    const startAngle = 180;
-    const endAngle = 0;
+    // Spread evenly across the arc, using 165 to 15 degrees to leave margins on mobile
+    const startAngle = 165;
+    const endAngle = 15;
     const angleStep = (startAngle - endAngle) / (totalIcons - 1 || 1);
 
     return items.map((item, index) => {
       const angleDeg = startAngle - index * angleStep;
       const angleRad = (angleDeg * Math.PI) / 180;
       
+      const r = 400; 
       const cx = 500;
-      const cy = 480; // The arc center is at y=480
+      // Center of arc raised to 520 to allow 65% aspect ratio in viewBox 1000 650
+      const cy = 520; 
+
+      const x = cx + r * Math.cos(angleRad);
+      const y = cy - r * Math.sin(angleRad);
+      
+      const posX = (x / 1000) * 100;
+      const posY = (y / 650) * 100;
       
       if (!selectedDomain) {
-        // Main Domain Button : exactly on the arc (r = 400)
-        const r = 400; 
-        const x = cx + r * Math.cos(angleRad);
-        const y = cy - r * Math.sin(angleRad);
-        const posX = (x / 1000) * 100;
-        const posY = (y / 500) * 100;
-
+        // Main Domain Button
         const cat = item;
         return (
           <button 
@@ -83,10 +85,10 @@ export function RainbowCategories() {
               animationDelay: `${index * 0.05}s` 
             }}
           >
-            <div className="w-11 h-11 md:w-14 md:h-14 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-transparent text-[#5B21B6] group-hover:border-[#5B21B6] transition-colors relative z-20">
+            <div className="w-10 h-10 md:w-14 md:h-14 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-transparent text-[#5B21B6] group-hover:border-[#5B21B6] transition-colors relative z-20">
               <cat.icon className="w-5 h-5 md:w-6 md:h-6" strokeWidth={2.5} />
             </div>
-            <span className="mt-1.5 text-[10px] md:text-[11px] font-bold text-slate-800 bg-white px-2.5 py-1 rounded-full whitespace-nowrap shadow-md group-hover:bg-[#5B21B6] group-hover:text-white transition-colors relative z-20">
+            <span className="mt-1 text-[9px] md:text-[11px] font-bold text-slate-800 bg-white px-2 py-1 rounded-full whitespace-nowrap shadow-md group-hover:bg-[#5B21B6] group-hover:text-white transition-colors relative z-20">
               {cat.label}
             </span>
           </button>
@@ -97,7 +99,7 @@ export function RainbowCategories() {
         const x = cx + r * Math.cos(angleRad);
         const y = cy - r * Math.sin(angleRad);
         const posX = (x / 1000) * 100;
-        const posY = (y / 500) * 100;
+        const posY = (y / 650) * 100;
 
         const sub = item;
         return (
@@ -111,7 +113,7 @@ export function RainbowCategories() {
               animationDelay: `${index * 0.03}s` 
             }}
           >
-            <span className="text-[9px] md:text-[10px] font-bold text-[#5B21B6] bg-white border border-slate-200 px-2.5 py-1.5 rounded-full whitespace-nowrap shadow-lg hover:border-[#5B21B6] hover:bg-purple-50 transition-colors">
+            <span className="text-[9px] md:text-[10px] font-bold text-[#5B21B6] bg-white border border-slate-200 px-2 py-1 md:px-2.5 md:py-1.5 rounded-full whitespace-nowrap shadow-lg hover:border-[#5B21B6] hover:bg-purple-50 transition-colors">
               {sub}
             </span>
           </button>
@@ -121,13 +123,13 @@ export function RainbowCategories() {
   };
 
   return (
-    <div className="relative w-full max-w-[800px] mx-auto mt-8 px-2 pb-16 overflow-visible">
-      {/* Container aspect ratio for the arc matched to SVG viewBox 1000x500 (2:1 -> 50%) */}
-      <div className="relative w-full pb-[50%]">
+    <div className="relative w-full max-w-[800px] mx-auto mt-6 md:mt-8 px-2 pb-12 overflow-visible">
+      {/* Container aspect ratio for the arc matched to SVG viewBox 1000x650 */}
+      <div className="relative w-full pb-[65%]">
         
         {/* SVG Arc Line */}
         <svg 
-          viewBox="0 0 1000 500" 
+          viewBox="0 0 1000 650" 
           className="absolute inset-0 w-full h-full overflow-visible pointer-events-none"
           preserveAspectRatio="xMidYMax slice"
         >
@@ -144,7 +146,7 @@ export function RainbowCategories() {
           </defs>
           
           <path 
-            d="M 100 480 A 400 400 0 0 1 900 480" 
+            d="M 100 520 A 400 400 0 0 1 900 520" 
             fill="none" 
             stroke="url(#rainbowLine)" 
             strokeWidth="6"
@@ -154,7 +156,7 @@ export function RainbowCategories() {
         </svg>
 
         {/* Central Circular Image */}
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[20%] w-[55%] max-w-[280px] aspect-square rounded-full border-8 border-white shadow-2xl overflow-hidden z-0">
+        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-[15%] w-[45%] md:w-[50%] max-w-[280px] aspect-square rounded-full border-4 md:border-8 border-white shadow-xl md:shadow-2xl overflow-hidden z-0">
           <img 
             src="https://images.unsplash.com/photo-1593113630400-ea4288922497?auto=format&fit=crop&w=600&q=80" 
             alt="Communauté" 
