@@ -130,7 +130,7 @@ export function RainbowCategories() {
   };
 
   return (
-    <div className="relative w-full max-w-[800px] mx-auto mt-6 md:mt-8 px-2 pb-12 overflow-visible">
+    <div className="relative w-full max-w-[800px] mx-auto mt-6 md:mt-8 pt-16 px-12 md:px-24 pb-12 overflow-visible">
       {/* Container aspect ratio for the arc matched to SVG viewBox 1000x650 */}
       <div className="relative w-full pb-[65%]">
         
